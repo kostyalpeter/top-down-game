@@ -19,12 +19,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // mozgás input
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(moveX, moveY).normalized;
 
-        // player flip (balra/jobbra)
         if (moveX > 0 && !facingRight)
         {
             facingRight = true;
@@ -36,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
             sprite.flipX = true;
         }
 
-        // animáció paraméterek
         animator.SetFloat("moveX", moveX);
         animator.SetFloat("moveY", moveY);
         animator.SetBool("IsMoving", moveInput.magnitude > 0f);
