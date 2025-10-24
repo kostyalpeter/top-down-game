@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
         // animáció paraméterek
         animator.SetFloat("moveX", moveX);
         animator.SetFloat("moveY", moveY);
-        animator.SetBool("IsMoving", moveInput != Vector2.zero);
+        animator.SetBool("IsMoving", moveInput.magnitude > 0f);
     }
 
     void FixedUpdate()
