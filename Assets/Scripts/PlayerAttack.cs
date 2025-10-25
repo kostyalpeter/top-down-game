@@ -5,7 +5,7 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator;
     public GameObject attackPoint;
     public float radius;
-    public LayerMask enemies;
+    public LayerMask enemyLayer;
 
     void Start()
     {
@@ -20,21 +20,18 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("E key pressed");
-            Attack();
+            animator.SetTrigger("Attack");
         }
     }
 
-    void Attack()
+    public void Attack()
     {
-        animator.SetTrigger("Attack");
-    }
-    public void attack()
-    {
-        Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, enemies);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, enemyLayer);
 
-        foreach (Collider2D enemyGameobject in enemy)
+        foreach (Collider2D enemy in enemies)
         {
-            Debug.Log("Hit enemy");
+            enemy.GetComponent<EnemyHealth>().TakeDamage(20);
+
         }
     }
 
@@ -42,7 +39,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
     }
-    
+
     private void endAttack()
     {
         animator.SetBool("isAttacking", false);

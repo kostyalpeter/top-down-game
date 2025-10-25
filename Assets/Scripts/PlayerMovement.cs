@@ -26,12 +26,12 @@ public class PlayerMovement : MonoBehaviour
         if (moveX > 0 && !facingRight)
         {
             facingRight = true;
-            sprite.flipX = false;
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
         else if (moveX < 0 && facingRight)
         {
             facingRight = false;
-            sprite.flipX = true;
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
 
         animator.SetFloat("moveX", moveX);
