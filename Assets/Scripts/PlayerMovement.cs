@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 moveInput;
-    private bool facingRight;
+    private bool facingRight = true;
 
     private SpriteRenderer sprite;
     private Animator animator;
@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("moveX", moveX);
         animator.SetFloat("moveY", moveY);
-        animator.SetBool("IsMoving", moveInput.magnitude > 0f);
     }
 
     void FixedUpdate()
