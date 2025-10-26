@@ -6,7 +6,7 @@ public class BreakableObject : MonoBehaviour
     private int currentHealth;
     private bool isBroken = false;
 
-    public GameObject destroyEffect;
+    public GameObject destroyEffectPrefab;
 
     void Start()
     {
@@ -33,9 +33,24 @@ public class BreakableObject : MonoBehaviour
 
         Debug.Log(name + " széttörik!");
 
-        if (destroyEffect != null)
-            Instantiate(destroyEffect, transform.position, Quaternion.identity);
+        if (destroyEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(destroyEffectPrefab, transform.position, Quaternion.identity);
 
-        Destroy(gameObject, 0f);
+            ParticleSystem[] particles = effect.GetComponentsInChildren<ParticleSystem>();
+            foreach (var ps in particles)
+            {
+                ps.Play();
+            }
+
+            float duration = 0f;
+            foreach (var ps in particles)
+            {
+                duration = Mathf.Max(duration, ps.main.duration + ps.main.startLifetime.constantMax);
+            }
+            Destroy(effect, duration + 0.1f);
+        }
+
+        Destroy(gameObject);
     }
 }
