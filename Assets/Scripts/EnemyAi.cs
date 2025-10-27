@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class EnemyAi : MonoBehaviour
 {
-    private enum State
-    {
-        Roaming,
-        Chasing,
-        Attacking
-    }
+    private enum State { Roaming, Chasing, Attacking }
+
+    [Header("AI Settings")]
+    public float detectionRange = 5f;
+    public float attackRange = 1.2f;
+    public float attackCooldown = 1f;
+    public LayerMask obstacleMask;
+    public float roamDelay = 2f;
 
     private State state;
     private EnemyPathfinding enemyPathfinding;
@@ -17,13 +19,7 @@ public class EnemyAi : MonoBehaviour
     private Animator animator;
     private bool canAttack = true;
 
-    [Header("AI Settings")]
-    public float detectionRange = 5f;
-    public float attackRange = 1.2f;
-    public float attackCooldown = 1f;
-    public LayerMask obstacleMask;
-    public LayerMask playerMask;
-    public float roamDelay = 2f;
+    private PlayerHealth playerHealth;
 
     private void Awake()
     {
@@ -35,7 +31,18 @@ public class EnemyAi : MonoBehaviour
     {
         sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj == null)
+        {
+            Debug.LogError("[EnemyAi] Nincs Player taggel ellátott objektum a jelenetben.");
+            enabled = false;
+            return;
+        }
+
+        player = playerObj.transform;
+        playerHealth = playerObj.GetComponent<PlayerHealth>();
+
         StartCoroutine(StateMachine());
     }
 
@@ -45,15 +52,9 @@ public class EnemyAi : MonoBehaviour
         {
             switch (state)
             {
-                case State.Roaming:
-                    yield return StartCoroutine(RoamingRoutine());
-                    break;
-                case State.Chasing:
-                    yield return StartCoroutine(ChasingRoutine());
-                    break;
-                case State.Attacking:
-                    yield return StartCoroutine(AttackRoutine());
-                    break;
+                case State.Roaming:   yield return RoamingRoutine(); break;
+                case State.Chasing:   yield return ChasingRoutine(); break;
+                case State.Attacking: yield return AttackRoutine();  break;
             }
             yield return null;
         }
@@ -71,8 +72,8 @@ public class EnemyAi : MonoBehaviour
 
             Vector2 roamTarget = GetRoamingPosition();
             enemyPathfinding.MoveTo(roamTarget);
+            if (sprite) sprite.flipX = !enemyPathfinding.IsFacingRight();
 
-            sprite.flipX = !enemyPathfinding.IsFacingRight();
             yield return new WaitForSeconds(roamDelay);
         }
     }
@@ -81,8 +82,9 @@ public class EnemyAi : MonoBehaviour
     {
         while (state == State.Chasing)
         {
-            if (!CanSeePlayer())
+            if (!CanSeePlayer() || PlayerGoneOrDead())
             {
+                enemyPathfinding.StopMoving();
                 state = State.Roaming;
                 yield break;
             }
@@ -95,7 +97,7 @@ public class EnemyAi : MonoBehaviour
             }
 
             enemyPathfinding.MoveTo(player.position);
-            sprite.flipX = !enemyPathfinding.IsFacingRight();
+            if (sprite) sprite.flipX = (player.position.x < transform.position.x);
             yield return null;
         }
     }
@@ -104,21 +106,27 @@ public class EnemyAi : MonoBehaviour
     {
         while (state == State.Attacking)
         {
-            float distance = Vector2.Distance(transform.position, player.position);
+            if (PlayerGoneOrDead())
+            {
+                enemyPathfinding.StopMoving();
+                state = State.Roaming;
+                yield break;
+            }
 
+            float distance = Vector2.Distance(transform.position, player.position);
             if (distance > attackRange)
             {
                 state = State.Chasing;
                 yield break;
             }
 
-            sprite.flipX = (player.position.x < transform.position.x);
+            if (sprite) sprite.flipX = (player.position.x < transform.position.x);
 
             if (canAttack)
             {
                 canAttack = false;
 
-                if (animator != null)
+                if (animator)
                 {
                     animator.ResetTrigger("Attack");
                     animator.SetTrigger("Attack");
@@ -126,9 +134,8 @@ public class EnemyAi : MonoBehaviour
 
                 enemyPathfinding.StopMoving();
 
-                PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-                if (playerHealth != null)
-                    playerHealth.TakeDamage(1);
+                if (playerHealth != null && !playerHealth.Dead)
+                    playerHealth.TakeDamage(20);
 
                 yield return new WaitForSeconds(attackCooldown);
 
@@ -140,6 +147,14 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
+    private bool PlayerGoneOrDead()
+    {
+        if (player == null) return true;
+        if (!player.gameObject.activeInHierarchy) return true;
+        if (playerHealth == null) return true;
+        return playerHealth.Dead;
+    }
+
     private Vector2 GetRoamingPosition()
     {
         Vector2 randomDir = Random.insideUnitCircle.normalized;
@@ -149,21 +164,14 @@ public class EnemyAi : MonoBehaviour
     private bool CanSeePlayer()
     {
         if (player == null) return false;
+
         float distance = Vector2.Distance(transform.position, player.position);
         if (distance > detectionRange) return false;
 
         Vector2 direction = (player.position - transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, obstacleMask | playerMask);
+        int mask = obstacleMask | (1 << player.gameObject.layer);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, mask);
+
         return hit.collider != null && hit.collider.CompareTag("Player");
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-#endif
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text gameOverText;
     public float restartDelay = 5f;
+
     private bool gameOverTriggered = false;
 
     private void Awake()
@@ -19,7 +22,7 @@ public class GameManager : MonoBehaviour
             gameOverText.gameObject.SetActive(false);
     }
 
-    public void GameOver()
+    public void TriggerGameOver()
     {
         if (gameOverTriggered) return;
         gameOverTriggered = true;
@@ -27,15 +30,12 @@ public class GameManager : MonoBehaviour
         if (gameOverText != null)
             gameOverText.gameObject.SetActive(true);
 
-        Time.timeScale = 0f;
-
         StartCoroutine(RestartAfterDelay());
     }
 
-    private System.Collections.IEnumerator RestartAfterDelay()
+    private IEnumerator RestartAfterDelay()
     {
-        yield return new WaitForSecondsRealtime(restartDelay);
-        Time.timeScale = 1f;
+        yield return new WaitForSeconds(restartDelay);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

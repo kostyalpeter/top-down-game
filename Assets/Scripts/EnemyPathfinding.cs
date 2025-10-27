@@ -4,7 +4,6 @@ using UnityEngine;
 public class EnemyPathfinding : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
-
     private Rigidbody2D rb;
     private Vector2 moveDir;
 
@@ -24,17 +23,9 @@ public class EnemyPathfinding : MonoBehaviour
         moveDir = direction;
     }
 
-    public void StopMoving()
-    {
-        moveDir = Vector2.zero;
-    }
+    public void StopMoving() => moveDir = Vector2.zero;
 
-    public void ResumeMoving()
-    {
-    }
+    public void ResumeMoving() { }
 
-    public bool IsFacingRight()
-    {
-        return moveDir.x >= 0;
-    }
+    public bool IsFacingRight() => moveDir.x >= 0;
 }
