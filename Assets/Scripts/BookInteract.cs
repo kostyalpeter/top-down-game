@@ -3,35 +3,44 @@ using TMPro;
 
 public class BookInteract : MonoBehaviour
 {
-    [Header("Beállítások")]
-    [SerializeField] private GameObject bookUI;
-    [SerializeField] private GameObject page1Text1;
-    [SerializeField] private GameObject page1Text2;
-    [SerializeField] private GameObject page2Text1;
-    [SerializeField] private GameObject page2Text2;
-    [SerializeField] private float interactDistance = 2f;
+    [Header("UI elemek")]
+    public GameObject bookUI;                 // A könyv UI (Canvas)
 
-    private Transform player;
+    [Header("1. oldal szövegek")]
+    public TMP_Text firstPageText1;
+    public TMP_Text firstPageText2;
+
+    [Header("2. oldal szövegek")]
+    public TMP_Text secondPageText1;
+    public TMP_Text secondPageText2;
+
+    [Header("3. oldal szövegek")]
+    public TMP_Text thirdPageText1;
+    public TMP_Text thirdPageText2;
+
+    [Header("Egyéb beállítások")]
+    public Transform player;
+    public float interactDistance = 2f;
+
     private bool isReading = false;
-    private bool onFirstPage = true;
+    private int currentPage = 0;
+    private int totalPages = 3;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
+        HideAllPages();
         if (bookUI != null)
             bookUI.SetActive(false);
-
-        HideAllText();
     }
 
     void Update()
     {
         if (player == null || bookUI == null) return;
 
-        float dist = Vector2.Distance(transform.position, player.position);
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (dist <= interactDistance && Input.GetKeyDown(KeyCode.C))
+        // Ha közel van és megnyomja a C-t
+        if (distanceToPlayer <= interactDistance && Input.GetKeyDown(KeyCode.C))
         {
             if (!isReading)
             {
@@ -43,12 +52,8 @@ public class BookInteract : MonoBehaviour
             }
         }
 
-        if (isReading && Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseBook();
-        }
-
-        if (isReading && dist > interactDistance)
+        // Bezárás: ESC vagy ha messze megy
+        if (isReading && (Input.GetKeyDown(KeyCode.Escape) || distanceToPlayer > interactDistance))
         {
             CloseBook();
         }
@@ -57,60 +62,61 @@ public class BookInteract : MonoBehaviour
     private void OpenBook()
     {
         isReading = true;
-        onFirstPage = true;
-
-        if (bookUI != null)
-            bookUI.SetActive(true);
-
-        ShowFirstPage();
-        Debug.Log("📖 Könyv megnyitva, első oldal látszik!");
+        currentPage = 1;
+        bookUI.SetActive(true);
+        ShowPage(currentPage);
+        Debug.Log("📖 Könyv megnyitva, 1. oldal látszik.");
     }
 
     private void NextPage()
     {
-        if (onFirstPage)
-        {
-            ShowSecondPage();
-            onFirstPage = false;
-        }
-        else
-        {
-            ShowFirstPage();
-            onFirstPage = true;
-        }
+        currentPage++;
+
+        if (currentPage > totalPages)
+            currentPage = 1; // újra az elsőre ugrik vissza
+
+        ShowPage(currentPage);
+        Debug.Log($"📘 Lapozás: {currentPage}. oldal látszik.");
     }
 
     private void CloseBook()
     {
         isReading = false;
-        if (bookUI != null)
-            bookUI.SetActive(false);
-
-        HideAllText();
+        bookUI.SetActive(false);
+        HideAllPages();
         Debug.Log("📕 Könyv bezárva.");
     }
 
-    private void ShowFirstPage()
+    private void ShowPage(int page)
     {
-        HideAllText();
+        HideAllPages();
 
-        if (page1Text1 != null) page1Text1.SetActive(true);
-        if (page1Text2 != null) page1Text2.SetActive(true);
+        switch (page)
+        {
+            case 1:
+                if (firstPageText1 != null) firstPageText1.gameObject.SetActive(true);
+                if (firstPageText2 != null) firstPageText2.gameObject.SetActive(true);
+                break;
+
+            case 2:
+                if (secondPageText1 != null) secondPageText1.gameObject.SetActive(true);
+                if (secondPageText2 != null) secondPageText2.gameObject.SetActive(true);
+                break;
+
+            case 3:
+                if (thirdPageText1 != null) thirdPageText1.gameObject.SetActive(true);
+                if (thirdPageText2 != null) thirdPageText2.gameObject.SetActive(true);
+                break;
+        }
     }
 
-    private void ShowSecondPage()
+    private void HideAllPages()
     {
-        HideAllText();
-
-        if (page2Text1 != null) page2Text1.SetActive(true);
-        if (page2Text2 != null) page2Text2.SetActive(true);
-    }
-
-    private void HideAllText()
-    {
-        if (page1Text1 != null) page1Text1.SetActive(false);
-        if (page1Text2 != null) page1Text2.SetActive(false);
-        if (page2Text1 != null) page2Text1.SetActive(false);
-        if (page2Text2 != null) page2Text2.SetActive(false);
+        if (firstPageText1 != null) firstPageText1.gameObject.SetActive(false);
+        if (firstPageText2 != null) firstPageText2.gameObject.SetActive(false);
+        if (secondPageText1 != null) secondPageText1.gameObject.SetActive(false);
+        if (secondPageText2 != null) secondPageText2.gameObject.SetActive(false);
+        if (thirdPageText1 != null) thirdPageText1.gameObject.SetActive(false);
+        if (thirdPageText2 != null) thirdPageText2.gameObject.SetActive(false);
     }
 }
