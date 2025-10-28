@@ -4,12 +4,14 @@ using TMPro;
 public class NPCBubble : MonoBehaviour
 {
     [Header("Beállítások")]
-    [SerializeField] private GameObject bubbleObject;   // Ide húzd be a TextBubble GameObjectet
-    [SerializeField] public TMP_Text bubbleText;       // Ide húzd be a TMP Text komponenst
+    [SerializeField] private GameObject bubbleObject;
+    [SerializeField] private TMP_Text bubbleText1;
+    [SerializeField] private TMP_Text bubbleText2;
     [SerializeField] private float interactDistance = 2f;
 
     private Transform player;
     private bool isVisible = false;
+    private int currentIndex = 0;
 
     void Start()
     {
@@ -17,6 +19,11 @@ public class NPCBubble : MonoBehaviour
 
         if (bubbleObject != null)
             bubbleObject.SetActive(false);
+
+        if (bubbleText1 != null)
+            bubbleText1.gameObject.SetActive(false);
+        if (bubbleText2 != null)
+            bubbleText2.gameObject.SetActive(false);
 
         SetupCanvas();
     }
@@ -29,47 +36,71 @@ public class NPCBubble : MonoBehaviour
 
         if (dist <= interactDistance && Input.GetKeyDown(KeyCode.C))
         {
-            ToggleBubble();
+            if (!isVisible)
+            {
+                ShowBubble();
+            }
+            else
+            {
+                NextText();
+            }
         }
 
         if (isVisible && dist > interactDistance)
         {
-            HideBubble();
+            HideBubbleAndTexts();
         }
-    }
-
-    private void ToggleBubble()
-    {
-        isVisible = !isVisible;
-
-        if (isVisible)
-            ShowBubble();
-        else
-            HideBubble();
     }
 
     private void ShowBubble()
     {
-        if (bubbleObject == null) return;
+        isVisible = true;
+        currentIndex = 0;
 
         bubbleObject.SetActive(true);
         SetupCanvas();
 
-        if (bubbleText != null)
-            bubbleText.gameObject.SetActive(true);
+        // Első szöveg mutatása
+        if (bubbleText1 != null)
+            bubbleText1.gameObject.SetActive(true);
+        if (bubbleText2 != null)
+            bubbleText2.gameObject.SetActive(false);
 
-        Debug.Log("💬 Buborék megjelent!");
+        Debug.Log("💬 Bubble Text 1 látszik!");
     }
 
-    private void HideBubble()
+    private void NextText()
     {
-        if (bubbleObject == null) return;
+        if (currentIndex == 0)
+        {
+            if (bubbleText1 != null)
+                bubbleText1.gameObject.SetActive(false);
+            if (bubbleText2 != null)
+                bubbleText2.gameObject.SetActive(true);
 
-        bubbleObject.SetActive(false);
+            currentIndex = 1;
+            Debug.Log("💬 Bubble Text 2 látszik!");
+        }
+        else
+        {
+            Debug.Log("🗨️ Marad a második szöveg, nem tűnik el.");
+        }
+    }
+
+    private void HideBubbleAndTexts()
+    {
         isVisible = false;
-        bubbleText.gameObject.SetActive(false);
+        currentIndex = 0;
 
-        Debug.Log("💭 Buborék eltűnt.");
+        if (bubbleObject != null)
+            bubbleObject.SetActive(false);
+
+        if (bubbleText1 != null)
+            bubbleText1.gameObject.SetActive(false);
+        if (bubbleText2 != null)
+            bubbleText2.gameObject.SetActive(false);
+
+        Debug.Log("💭 Buborék és szövegek eltűntek, mert kimentél a hatótávból.");
     }
 
     private void SetupCanvas()
@@ -84,12 +115,18 @@ public class NPCBubble : MonoBehaviour
             canvas.transform.localPosition = new Vector3(0, 1.5f, 0);
         }
 
-        if (bubbleText != null)
+        if (bubbleText1 != null)
         {
-            bubbleText.alignment = TextAlignmentOptions.Center;
-            bubbleText.enableWordWrapping = true;
-            bubbleText.overflowMode = TextOverflowModes.Overflow;
-            bubbleText.alpha = 1f;
+            bubbleText1.alignment = TextAlignmentOptions.Center;
+            bubbleText1.enableWordWrapping = true;
+            bubbleText1.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        if (bubbleText2 != null)
+        {
+            bubbleText2.alignment = TextAlignmentOptions.Center;
+            bubbleText2.enableWordWrapping = true;
+            bubbleText2.overflowMode = TextOverflowModes.Overflow;
         }
     }
 }
