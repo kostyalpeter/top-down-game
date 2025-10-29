@@ -1,0 +1,45 @@
+using UnityEngine;
+using TMPro;
+
+public class HintTrigger : MonoBehaviour
+{
+    [SerializeField] private TMP_Text hintText;
+    [SerializeField] private string message = "Press C to interact";
+    [SerializeField] private float showDistance = 2f;
+
+    private Transform player;
+    private bool isVisible = false;
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (hintText != null)
+            hintText.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (player == null || hintText == null) return;
+
+        float dist = Vector2.Distance(transform.position, player.position);
+
+        if (dist <= showDistance && !isVisible)
+            ShowHint();
+        else if (dist > showDistance && isVisible)
+            HideHint();
+    }
+
+    private void ShowHint()
+    {
+        isVisible = true;
+        hintText.text = message;
+        hintText.gameObject.SetActive(true);
+    }
+
+    private void HideHint()
+    {
+        isVisible = false;
+        hintText.gameObject.SetActive(false);
+    }
+}
