@@ -4,7 +4,7 @@ using TMPro;
 public class BookInteract : MonoBehaviour
 {
     [Header("UI elemek")]
-    public GameObject bookUI;                 // A könyv UI (Canvas)
+    public GameObject bookUI;
 
     [Header("1. oldal szövegek")]
     public TMP_Text firstPageText1;
@@ -39,7 +39,6 @@ public class BookInteract : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // Ha közel van és megnyomja a C-t
         if (distanceToPlayer <= interactDistance && Input.GetKeyDown(KeyCode.C))
         {
             if (!isReading)
@@ -52,7 +51,6 @@ public class BookInteract : MonoBehaviour
             }
         }
 
-        // Bezárás: ESC vagy ha messze megy
         if (isReading && (Input.GetKeyDown(KeyCode.Escape) || distanceToPlayer > interactDistance))
         {
             CloseBook();
@@ -65,7 +63,8 @@ public class BookInteract : MonoBehaviour
         currentPage = 1;
         bookUI.SetActive(true);
         ShowPage(currentPage);
-        Debug.Log("📖 Könyv megnyitva, 1. oldal látszik.");
+
+        Time.timeScale = 0f;
     }
 
     private void NextPage()
@@ -73,10 +72,12 @@ public class BookInteract : MonoBehaviour
         currentPage++;
 
         if (currentPage > totalPages)
-            currentPage = 1; // újra az elsőre ugrik vissza
+        {
+            CloseBook();
+            return;
+        }
 
         ShowPage(currentPage);
-        Debug.Log($"📘 Lapozás: {currentPage}. oldal látszik.");
     }
 
     private void CloseBook()
@@ -84,7 +85,9 @@ public class BookInteract : MonoBehaviour
         isReading = false;
         bookUI.SetActive(false);
         HideAllPages();
-        Debug.Log("📕 Könyv bezárva.");
+
+        Time.timeScale = 1f;
+
     }
 
     private void ShowPage(int page)
