@@ -178,5 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329434e06de4ed645b494f1cc07a4777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrow
-  lifetime: 10
-  damage: 20
+  damage: 10
+  lifeTime: 2
+  destroyDelay: 0.05

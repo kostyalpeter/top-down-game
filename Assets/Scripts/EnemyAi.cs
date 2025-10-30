@@ -12,6 +12,9 @@ public class EnemyAi : MonoBehaviour
     public LayerMask obstacleMask;
     public float roamDelay = 2f;
 
+    [Header("Combat Settings")]
+    public int damage = 20;
+
     private State state;
     private EnemyPathfinding enemyPathfinding;
     private SpriteRenderer sprite;
@@ -135,7 +138,7 @@ public class EnemyAi : MonoBehaviour
                 enemyPathfinding.StopMoving();
 
                 if (playerHealth != null && !playerHealth.Dead)
-                    playerHealth.TakeDamage(20);
+                    playerHealth.TakeDamage(damage);
 
                 yield return new WaitForSeconds(attackCooldown);
 

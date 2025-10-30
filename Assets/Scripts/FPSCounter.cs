@@ -5,7 +5,7 @@ public class FPSCounter : MonoBehaviour
 {
     public TMP_Text fpsText;
     private float deltaTime = 0.0f;
-    public int maxFPS = 1000;
+    public int maxFPS = 67;
 
     void Update()
     {

@@ -8,13 +8,16 @@ public class PlayerAttack : MonoBehaviour
     public float radius = 0.5f;
     public LayerMask enemyLayer;
 
-    [Header("Bow Settings")]
     public GameObject arrowPrefab;
     public float arrowSpeed = 10f;
-    public float bowFireDelay = 0.45f;
+    public float attackCooldown = 0.6f;
+
+    private bool canAttack = true;
 
     void Update()
     {
+        if (!canAttack) return;
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             var wm = PlayerWeaponManager.Instance;
@@ -23,23 +26,21 @@ public class PlayerAttack : MonoBehaviour
             if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Sword)
             {
                 animator.SetTrigger("Attack");
+                StartCoroutine(AttackCooldown());
             }
             else if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Bow)
             {
                 animator.SetTrigger("Attack_Bow");
+                StartCoroutine(AttackCooldown());
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            ShootArrow();
         }
     }
 
-    IEnumerator FireAfterDelay(float t)
+    IEnumerator AttackCooldown()
     {
-        yield return new WaitForSeconds(t);
-        ShootArrow();
+        canAttack = false;
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
     }
 
     public void Attack()
@@ -93,9 +94,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-
-
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         if (attackPoint != null)
             Gizmos.DrawWireSphere(attackPoint.transform.position, radius);

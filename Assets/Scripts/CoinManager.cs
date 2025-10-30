@@ -22,6 +22,6 @@ public class CoinManager : MonoBehaviour
     private void UpdateUI()
     {
         if (coinText != null)
-            coinText.text = "💰 " + coins;
+            coinText.text = "Gold=" + coins;
     }
 }
