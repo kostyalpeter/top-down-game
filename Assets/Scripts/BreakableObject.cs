@@ -7,6 +7,8 @@ public class BreakableObject : MonoBehaviour
     private bool isBroken = false;
 
     public GameObject destroyEffectPrefab;
+    public GameObject spawnOnBreak; // ide húzod be, mit spawnoljon (pl. coin, xpOrb stb.)
+    public Transform spawnPoint;    // opcionális – ha máshonnan akarod, nem a középpontból
 
     void Start()
     {
@@ -21,9 +23,7 @@ public class BreakableObject : MonoBehaviour
         Debug.Log(name + " kapott " + damage + " sebzést, HP: " + currentHealth);
 
         if (currentHealth <= 0)
-        {
             Break();
-        }
     }
 
     void Break()
@@ -39,16 +39,19 @@ public class BreakableObject : MonoBehaviour
 
             ParticleSystem[] particles = effect.GetComponentsInChildren<ParticleSystem>();
             foreach (var ps in particles)
-            {
                 ps.Play();
-            }
 
             float duration = 0f;
             foreach (var ps in particles)
-            {
                 duration = Mathf.Max(duration, ps.main.duration + ps.main.startLifetime.constantMax);
-            }
+
             Destroy(effect, duration + 0.1f);
+        }
+
+        if (spawnOnBreak != null)
+        {
+            Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : transform.position;
+            Instantiate(spawnOnBreak, spawnPos, Quaternion.identity);
         }
 
         Destroy(gameObject);

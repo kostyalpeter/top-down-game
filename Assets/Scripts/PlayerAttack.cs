@@ -19,13 +19,32 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("E key pressed");
-            animator.SetTrigger("Attack");
+            if (PlayerWeaponManager.Instance == null)
+            {
+                Debug.LogWarning("Nincs PlayerWeaponManager példány!");
+                return;
+            }
+
+            var weapon = PlayerWeaponManager.Instance.currentWeapon;
+
+            if (weapon == PlayerWeaponManager.WeaponType.Sword)
+            {
+                Debug.Log("Kard támadás!");
+                animator.SetTrigger("Attack");
+            }
+            else if (weapon == PlayerWeaponManager.WeaponType.Bow)
+            {
+                Debug.Log("Íj animáció elindítva!");
+                animator.SetTrigger("Attack_Bow");
+            }
         }
     }
 
     public void Attack()
     {
+        var wm = PlayerWeaponManager.Instance;
+        if (wm == null || wm.currentWeapon != PlayerWeaponManager.WeaponType.Sword) return;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, enemyLayer);
 
         foreach (Collider2D hit in hits)
@@ -57,4 +76,29 @@ public class PlayerAttack : MonoBehaviour
     {
         animator.SetBool("isAttacking", false);
     }
+
+    [Header("Bow Settings")]
+public GameObject arrowPrefab;
+public Transform arrowSpawnPoint;
+public float arrowSpeed = 10f;
+
+public void ShootArrow()
+{
+    var wm = PlayerWeaponManager.Instance;
+    if (wm == null || wm.currentWeapon != PlayerWeaponManager.WeaponType.Bow) return;
+
+    if (arrowPrefab == null || arrowSpawnPoint == null)
+    {
+        Debug.LogWarning("Hiányzik az arrowPrefab vagy arrowSpawnPoint!");
+        return;
+    }
+
+    GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
+    Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
+    if (rb != null)
+        rb.linearVelocity = arrowSpawnPoint.right * arrowSpeed;
+
+    Debug.Log("🏹 Nyíl kilőve!");
+}
+
 }
