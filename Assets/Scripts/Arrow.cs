@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    public float lifetime = 2f;
+    [Header("Beállítások")]
+    public float lifetime = 3f;
     public int damage = 20;
-    public LayerMask enemyLayer;
 
     void Start()
     {
@@ -13,6 +13,9 @@ public class Arrow : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Player"))
+            return;
+
         EnemyHealth enemy = other.GetComponent<EnemyHealth>();
         if (enemy != null)
         {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -7,43 +8,45 @@ public class PlayerAttack : MonoBehaviour
     public float radius = 0.5f;
     public LayerMask enemyLayer;
 
-    void Start()
-    {
-        if (animator == null)
-        {
-            Debug.LogError("Animator component is not assigned!");
-        }
-    }
+    [Header("Bow Settings")]
+    public GameObject arrowPrefab;
+    public float arrowSpeed = 10f;
+    public float bowFireDelay = 0.45f;
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (PlayerWeaponManager.Instance == null)
-            {
-                Debug.LogWarning("Nincs PlayerWeaponManager példány!");
-                return;
-            }
+            var wm = PlayerWeaponManager.Instance;
+            if (wm == null) return;
 
-            var weapon = PlayerWeaponManager.Instance.currentWeapon;
-
-            if (weapon == PlayerWeaponManager.WeaponType.Sword)
+            if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Sword)
             {
-                Debug.Log("Kard támadás!");
                 animator.SetTrigger("Attack");
             }
-            else if (weapon == PlayerWeaponManager.WeaponType.Bow)
+            else if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Bow)
             {
-                Debug.Log("Íj animáció elindítva!");
                 animator.SetTrigger("Attack_Bow");
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ShootArrow();
+        }
+    }
+
+    IEnumerator FireAfterDelay(float t)
+    {
+        yield return new WaitForSeconds(t);
+        ShootArrow();
     }
 
     public void Attack()
     {
         var wm = PlayerWeaponManager.Instance;
-        if (wm == null || wm.currentWeapon != PlayerWeaponManager.WeaponType.Sword) return;
+        if (wm == null || wm.currentWeapon != PlayerWeaponManager.WeaponType.Sword)
+            return;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, enemyLayer);
 
@@ -53,7 +56,6 @@ public class PlayerAttack : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeDamage(20);
-                Debug.Log("Enemy sebződött: " + enemy.name);
                 continue;
             }
 
@@ -61,44 +63,41 @@ public class PlayerAttack : MonoBehaviour
             if (breakable != null)
             {
                 breakable.TakeDamage(20);
-                Debug.Log("Törhető objektum találat: " + breakable.name);
             }
         }
     }
+
+    public void ShootArrow()
+    {
+        if (arrowPrefab == null) return;
+
+        bool facingLeft = transform.localScale.x < 0f;
+
+        Vector3 spawnPos = transform.position + new Vector3(facingLeft ? -1.0f : 1.0f, 0f, 0f);
+        Quaternion spawnRot = Quaternion.identity;
+
+        GameObject arrow = Instantiate(arrowPrefab, spawnPos, spawnRot);
+
+        if (facingLeft)
+        {
+            Vector3 scale = arrow.transform.localScale;
+            scale.x *= -1;
+            arrow.transform.localScale = scale;
+        }
+
+        Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
+            rb.linearVelocity = dir * arrowSpeed;
+        }
+    }
+
+
 
     private void OnDrawGizmos()
     {
         if (attackPoint != null)
             Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
     }
-
-    private void endAttack()
-    {
-        animator.SetBool("isAttacking", false);
-    }
-
-    [Header("Bow Settings")]
-public GameObject arrowPrefab;
-public Transform arrowSpawnPoint;
-public float arrowSpeed = 10f;
-
-public void ShootArrow()
-{
-    var wm = PlayerWeaponManager.Instance;
-    if (wm == null || wm.currentWeapon != PlayerWeaponManager.WeaponType.Bow) return;
-
-    if (arrowPrefab == null || arrowSpawnPoint == null)
-    {
-        Debug.LogWarning("Hiányzik az arrowPrefab vagy arrowSpawnPoint!");
-        return;
-    }
-
-    GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
-    Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
-    if (rb != null)
-        rb.linearVelocity = arrowSpawnPoint.right * arrowSpeed;
-
-    Debug.Log("🏹 Nyíl kilőve!");
-}
-
 }
