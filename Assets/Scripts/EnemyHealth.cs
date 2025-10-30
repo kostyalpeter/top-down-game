@@ -4,6 +4,9 @@ public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public int maxHealth = 100;
+
+    public int CurrentHealth => currentHealth;
+
     private int currentHealth;
 
     [Header("Components")]
