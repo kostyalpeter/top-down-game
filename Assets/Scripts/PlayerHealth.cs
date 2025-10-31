@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -12,13 +13,14 @@ public class PlayerHealth : MonoBehaviour
     public float invulnAfterHit = 0.1f;
 
     private float _lastHitTime = -999f;
+    private bool _isInvincible = false;
     private Animator _anim;
     private Rigidbody2D _rb;
 
     private static readonly int HitHash = Animator.StringToHash("Hit");
     private static readonly int DieHash = Animator.StringToHash("Die");
 
-    private void Awake()
+    void Awake()
     {
         _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
@@ -29,9 +31,10 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (Dead) return;
+        if (_isInvincible) return;
         if (Time.time - _lastHitTime < invulnAfterHit) return;
-        _lastHitTime = Time.time;
 
+        _lastHitTime = Time.time;
         amount = Mathf.Max(0, amount);
         CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, maxHealth);
 
@@ -45,7 +48,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void Die()
+    void Die()
     {
         if (Dead) return;
         Dead = true;
@@ -75,5 +78,10 @@ public class PlayerHealth : MonoBehaviour
             if (mb == this) continue;
             mb.enabled = false;
         }
+    }
+
+    public void SetInvincible(bool state)
+    {
+        _isInvincible = state;
     }
 }
