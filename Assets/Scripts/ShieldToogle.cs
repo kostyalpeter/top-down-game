@@ -1,33 +1,38 @@
 using UnityEngine;
 using System.Collections;
 
-public class PShiledToogle : MonoBehaviour
+public class ShieldToggle : MonoBehaviour
 {
+    [Header("Shield Settings")]
     public GameObject shieldObject;
+    public PlayerHealth playerHealth;
     public float shieldDuration = 3f;
     public float shieldCooldown = 5f;
 
     private bool isActive;
     private bool onCooldown;
-    private PlayerHealth playerHealth;
 
     void Start()
     {
-        playerHealth = GetComponent<PlayerHealth>();
         if (shieldObject != null)
             shieldObject.SetActive(false);
     }
 
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.F) && !isActive && !onCooldown)
+        {
             StartCoroutine(ActivateShield());
+        }
     }
 
-    IEnumerator ActivateShield()
+    private IEnumerator ActivateShield()
     {
         isActive = true;
         onCooldown = true;
+
+        Debug.Log("🛡️ Pajzs aktiválva!");
 
         if (shieldObject != null)
             shieldObject.SetActive(true);
@@ -44,6 +49,8 @@ public class PShiledToogle : MonoBehaviour
             playerHealth.SetInvincibleState(false);
 
         isActive = false;
+        Debug.Log("🛡️ Pajzs lejárt!");
+
         yield return new WaitForSeconds(shieldCooldown);
         onCooldown = false;
     }

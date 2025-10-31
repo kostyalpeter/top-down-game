@@ -58,8 +58,6 @@ public class EnemyHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        Debug.Log(name + " meghalt!");
-
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
@@ -94,6 +92,7 @@ public class EnemyHealth : MonoBehaviour
                     xpOrb.xpAmount = Mathf.RoundToInt(Random.Range(xpRange.x, xpRange.y));
                 }
             }
+            
         }
 
         Destroy(gameObject, 2f);

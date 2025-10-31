@@ -123,4 +123,12 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
+
+    internal void Heal(int healAmount)
+    {
+        if (Dead) return;
+
+        healAmount = Mathf.Max(0, healAmount);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
+    }
 }
