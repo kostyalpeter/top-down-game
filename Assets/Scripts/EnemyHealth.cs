@@ -4,16 +4,26 @@ public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public int maxHealth = 100;
-
-    public int CurrentHealth => currentHealth;
-
     private int currentHealth;
+
+    public int GetCurrentHealth() => currentHealth;
+
     private bool isDead = false;
+
+    [Header("XP Drop Settings")]
+    public GameObject xpOrbPrefab;
+    public int minOrbs = 1;
+    public int maxOrbs = 3;
+    public Vector2 dropOffsetRange = new Vector2(0.5f, 0.5f);
+    public Vector2 xpRange = new Vector2(5, 15);
+    
 
     [Header("Components")]
     private Animator animator;
     private Collider2D col;
     private Rigidbody2D rb;
+
+    public float CurrentHealth { get; internal set; }
 
     void Start()
     {
@@ -65,17 +75,32 @@ public class EnemyHealth : MonoBehaviour
         if (col != null)
             col.enabled = false;
 
-        MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
-        foreach (var script in scripts)
+        if (xpOrbPrefab != null)
         {
-            if (script != this) script.enabled = false;
+            int orbCount = Random.Range(minOrbs, maxOrbs + 1);
+
+            for (int i = 0; i < orbCount; i++)
+            {
+                Vector2 offset = new Vector2(
+                    Random.Range(-dropOffsetRange.x, dropOffsetRange.x),
+                    Random.Range(-dropOffsetRange.y, dropOffsetRange.y)
+                );
+
+                GameObject orb = Instantiate(xpOrbPrefab, (Vector2)transform.position + offset, Quaternion.identity);
+
+                XPOrb xpOrb = orb.GetComponent<XPOrb>();
+                if (xpOrb != null)
+                {
+                    xpOrb.xpAmount = Mathf.RoundToInt(Random.Range(xpRange.x, xpRange.y));
+                }
+            }
         }
 
         Destroy(gameObject, 2f);
     }
 
-    public bool IsDead()
+    internal bool IsDead()
     {
-        return isDead;
+        throw new System.NotImplementedException();
     }
 }

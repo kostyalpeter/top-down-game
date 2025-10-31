@@ -32,6 +32,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (Dead) return;
+         if (invincible) return;
         if (Time.time - _lastHitTime < invulnAfterHit) return;
         _lastHitTime = Time.time;
 
@@ -61,6 +62,7 @@ public class PlayerHealth : MonoBehaviour
         if (attack != null)
             attack.SetTakingDamage(false);
     }
+    
 
 
     void Die()
@@ -95,8 +97,30 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void SetInvincible(bool state)
+    private bool invincible = false;
+
+    public void SetInvincibleState(bool state)
     {
-        _isInvincible = state;
+        invincible = state;
+    }
+
+    public void ApplyDamage(int amount)
+    {
+        if (Dead) return;
+        if (invincible) return;
+        if (Time.time - _lastHitTime < invulnAfterHit) return;
+
+        _lastHitTime = Time.time;
+        amount = Mathf.Max(0, amount);
+        CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, maxHealth);
+
+        if (CurrentHealth > 0)
+        {
+            if (_anim) _anim.SetTrigger("Hit");
+        }
+        else
+        {
+            Die();
+        }
     }
 }

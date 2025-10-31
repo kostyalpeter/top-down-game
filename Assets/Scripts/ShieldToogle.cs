@@ -1,80 +1,50 @@
 using UnityEngine;
+using System.Collections;
 
-public class ShieldToggle : MonoBehaviour
+public class PShiledToogle : MonoBehaviour
 {
     public GameObject shieldObject;
-    public float activeDuration = 3f;
-    public float cooldownTime = 5f;
-    public PlayerHealth playerHealth;
-    public int[] enemyLayersToIgnore;
+    public float shieldDuration = 3f;
+    public float shieldCooldown = 5f;
 
     private bool isActive;
-    private bool isOnCooldown;
-    private float activeTimer;
-    private float cooldownTimer;
-    private int playerLayer;
+    private bool onCooldown;
+    private PlayerHealth playerHealth;
 
     void Start()
     {
-        if (playerHealth == null)
-        {
-            var p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) playerHealth = p.GetComponent<PlayerHealth>();
-        }
-
-        if (playerHealth != null)
-            playerLayer = playerHealth.gameObject.layer;
-
+        playerHealth = GetComponent<PlayerHealth>();
         if (shieldObject != null)
             shieldObject.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && !isOnCooldown && !isActive)
-            ToggleShield(true);
-
-        if (isActive)
-        {
-            activeTimer -= Time.deltaTime;
-            if (activeTimer <= 0f)
-            {
-                ToggleShield(false);
-                StartCooldown();
-            }
-        }
-
-        if (isOnCooldown)
-        {
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0f)
-                isOnCooldown = false;
-        }
+        if (Input.GetKeyDown(KeyCode.F) && !isActive && !onCooldown)
+            StartCoroutine(ActivateShield());
     }
 
-    void ToggleShield(bool state)
+    IEnumerator ActivateShield()
     {
-        isActive = state;
+        isActive = true;
+        onCooldown = true;
 
         if (shieldObject != null)
-            shieldObject.SetActive(state);
+            shieldObject.SetActive(true);
 
         if (playerHealth != null)
-            playerHealth.SetInvincible(state);
+            playerHealth.SetInvincibleState(true);
 
-        if (enemyLayersToIgnore != null && playerHealth != null)
-        {
-            for (int i = 0; i < enemyLayersToIgnore.Length; i++)
-                Physics2D.IgnoreLayerCollision(playerLayer, enemyLayersToIgnore[i], state);
-        }
+        yield return new WaitForSeconds(shieldDuration);
 
-        if (state)
-            activeTimer = activeDuration;
-    }
+        if (shieldObject != null)
+            shieldObject.SetActive(false);
 
-    void StartCooldown()
-    {
-        isOnCooldown = true;
-        cooldownTimer = cooldownTime;
+        if (playerHealth != null)
+            playerHealth.SetInvincibleState(false);
+
+        isActive = false;
+        yield return new WaitForSeconds(shieldCooldown);
+        onCooldown = false;
     }
 }

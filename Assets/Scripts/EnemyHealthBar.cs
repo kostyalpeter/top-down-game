@@ -3,28 +3,41 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
-    public EnemyHealth enemyHealth;
     public Slider slider;
-    public Vector3 offset = new Vector3(0, 1.5f, 0);
+    public Vector3 offset = new Vector3(0f, 1.5f, 0f);
 
-    private Camera mainCam;
+    EnemyHealth enemy;
+    Camera cam;
+
+    void Awake()
+    {
+        enemy = GetComponentInParent<EnemyHealth>();
+        cam = Camera.main;
+    }
 
     void Start()
     {
-        mainCam = Camera.main;
-        if (enemyHealth == null)
-            enemyHealth = GetComponentInParent<EnemyHealth>();
-
-        if (slider != null && enemyHealth != null)
-            slider.maxValue = enemyHealth.maxHealth;
+        if (enemy && slider)
+        {
+            slider.minValue = 0;
+            slider.maxValue = enemy.maxHealth;
+            slider.value = enemy.maxHealth;
+        }
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (enemyHealth == null || slider == null)
-            return;
+        if (!enemy || !slider) return;
 
-        slider.value = Mathf.Clamp(enemyHealth.CurrentHealth, 0, enemyHealth.maxHealth);
-        transform.position = enemyHealth.transform.position + offset;
+        slider.value = Mathf.Clamp(enemy.GetCurrentHealth(), 0, enemy.maxHealth);
+
+        if (enemy.GetCurrentHealth() <= 0)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (cam == null) cam = Camera.main;
+        transform.position = enemy.transform.position + offset;
     }
 }

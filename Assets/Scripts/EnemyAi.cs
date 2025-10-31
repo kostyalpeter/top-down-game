@@ -142,7 +142,13 @@ public class EnemyAi : MonoBehaviour
                 enemyPathfinding.StopMoving();
 
                 if (playerHealth != null)
-                    playerHealth.TakeDamage(attackDamage);
+                {
+                    var shieldActive = playerHealth.GetType().GetField("invincible", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (shieldActive != null && !(bool)shieldActive.GetValue(playerHealth))
+                    {
+                        playerHealth.TakeDamage(attackDamage);
+                    }
+                }
 
                 yield return new WaitForSeconds(attackCooldown);
 
@@ -153,6 +159,7 @@ public class EnemyAi : MonoBehaviour
             yield return null;
         }
     }
+
 
     private bool PlayerIsDead()
     {
