@@ -8,12 +8,12 @@ public class EnemyHealth : MonoBehaviour
     public int CurrentHealth => currentHealth;
 
     private int currentHealth;
+    private bool isDead = false;
 
     [Header("Components")]
     private Animator animator;
     private Collider2D col;
     private Rigidbody2D rb;
-    private bool isDead = false;
 
     void Start()
     {
@@ -56,12 +56,6 @@ public class EnemyHealth : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
-        MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
-        foreach (var script in scripts)
-        {
-            if (script != this) script.enabled = false;
-        }
-
         if (animator != null)
         {
             animator.ResetTrigger("Hurt");
@@ -71,6 +65,17 @@ public class EnemyHealth : MonoBehaviour
         if (col != null)
             col.enabled = false;
 
+        MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();
+        foreach (var script in scripts)
+        {
+            if (script != this) script.enabled = false;
+        }
+
         Destroy(gameObject, 2f);
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
     }
 }

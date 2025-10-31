@@ -13,7 +13,7 @@ public class EnemyAi : MonoBehaviour
     public float roamDelay = 2f;
 
     [Header("Combat Settings")]
-    public int damage = 20;
+    public int attackDamage = 20;
 
     private State state;
     private EnemyPathfinding enemyPathfinding;
@@ -55,9 +55,15 @@ public class EnemyAi : MonoBehaviour
         {
             switch (state)
             {
-                case State.Roaming:   yield return RoamingRoutine(); break;
-                case State.Chasing:   yield return ChasingRoutine(); break;
-                case State.Attacking: yield return AttackRoutine();  break;
+                case State.Roaming:
+                    yield return StartCoroutine(RoamingRoutine());
+                    break;
+                case State.Chasing:
+                    yield return StartCoroutine(ChasingRoutine());
+                    break;
+                case State.Attacking:
+                    yield return StartCoroutine(AttackRoutine());
+                    break;
             }
             yield return null;
         }
@@ -75,7 +81,7 @@ public class EnemyAi : MonoBehaviour
 
             Vector2 roamTarget = GetRoamingPosition();
             enemyPathfinding.MoveTo(roamTarget);
-            if (sprite) sprite.flipX = !enemyPathfinding.IsFacingRight();
+            sprite.flipX = !enemyPathfinding.IsFacingRight();
 
             yield return new WaitForSeconds(roamDelay);
         }
@@ -85,10 +91,9 @@ public class EnemyAi : MonoBehaviour
     {
         while (state == State.Chasing)
         {
-            if (!CanSeePlayer() || PlayerGoneOrDead())
+            if (!CanSeePlayer() || PlayerIsDead())
             {
                 enemyPathfinding.StopMoving();
-                state = State.Roaming;
                 yield break;
             }
 
@@ -100,7 +105,7 @@ public class EnemyAi : MonoBehaviour
             }
 
             enemyPathfinding.MoveTo(player.position);
-            if (sprite) sprite.flipX = (player.position.x < transform.position.x);
+            sprite.flipX = (player.position.x < transform.position.x);
             yield return null;
         }
     }
@@ -109,10 +114,9 @@ public class EnemyAi : MonoBehaviour
     {
         while (state == State.Attacking)
         {
-            if (PlayerGoneOrDead())
+            if (PlayerIsDead())
             {
                 enemyPathfinding.StopMoving();
-                state = State.Roaming;
                 yield break;
             }
 
@@ -123,13 +127,13 @@ public class EnemyAi : MonoBehaviour
                 yield break;
             }
 
-            if (sprite) sprite.flipX = (player.position.x < transform.position.x);
+            sprite.flipX = (player.position.x < transform.position.x);
 
             if (canAttack)
             {
                 canAttack = false;
 
-                if (animator)
+                if (animator != null)
                 {
                     animator.ResetTrigger("Attack");
                     animator.SetTrigger("Attack");
@@ -137,8 +141,8 @@ public class EnemyAi : MonoBehaviour
 
                 enemyPathfinding.StopMoving();
 
-                if (playerHealth != null && !playerHealth.Dead)
-                    playerHealth.TakeDamage(damage);
+                if (playerHealth != null)
+                    playerHealth.TakeDamage(attackDamage);
 
                 yield return new WaitForSeconds(attackCooldown);
 
@@ -150,12 +154,11 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
-    private bool PlayerGoneOrDead()
+    private bool PlayerIsDead()
     {
         if (player == null) return true;
-        if (!player.gameObject.activeInHierarchy) return true;
-        if (playerHealth == null) return true;
-        return playerHealth.Dead;
+        PlayerHealth ph = player.GetComponent<PlayerHealth>();
+        return ph != null && ph.Dead;
     }
 
     private Vector2 GetRoamingPosition()
@@ -172,8 +175,7 @@ public class EnemyAi : MonoBehaviour
         if (distance > detectionRange) return false;
 
         Vector2 direction = (player.position - transform.position).normalized;
-        int mask = obstacleMask | (1 << player.gameObject.layer);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, mask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, obstacleMask | (1 << player.gameObject.layer));
 
         return hit.collider != null && hit.collider.CompareTag("Player");
     }

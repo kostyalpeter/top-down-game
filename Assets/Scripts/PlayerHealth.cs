@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -31,12 +32,18 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (Dead) return;
-        if (_isInvincible) return;
         if (Time.time - _lastHitTime < invulnAfterHit) return;
-
         _lastHitTime = Time.time;
+
         amount = Mathf.Max(0, amount);
         CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, maxHealth);
+
+        var attack = GetComponent<PlayerAttack>();
+        if (attack != null)
+        {
+            attack.SetTakingDamage(true);
+            StartCoroutine(ResetDamageLock(attack));
+        }
 
         if (CurrentHealth > 0)
         {
@@ -47,6 +54,14 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
+
+    private IEnumerator ResetDamageLock(PlayerAttack attack)
+    {
+        yield return new WaitForSeconds(0.6f);
+        if (attack != null)
+            attack.SetTakingDamage(false);
+    }
+
 
     void Die()
     {

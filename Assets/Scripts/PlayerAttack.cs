@@ -13,9 +13,11 @@ public class PlayerAttack : MonoBehaviour
     public float attackCooldown = 0.6f;
 
     private bool canAttack = true;
+    private bool takingDamage = false;
 
     void Update()
     {
+        if (takingDamage) return;
         if (!canAttack) return;
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -25,15 +27,45 @@ public class PlayerAttack : MonoBehaviour
 
             if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Sword)
             {
-                animator.SetTrigger("Attack");
-                StartCoroutine(AttackCooldown());
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+                {
+                    animator.ResetTrigger("Attack_Bow");
+                    animator.SetTrigger("Attack");
+                    StartCoroutine(AttackCooldown());
+                }
             }
             else if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Bow)
             {
-                animator.SetTrigger("Attack_Bow");
-                StartCoroutine(AttackCooldown());
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+                {
+                    animator.ResetTrigger("Attack");
+                    animator.SetTrigger("Attack_Bow");
+                    StartCoroutine(AttackCooldown());
+                }
             }
         }
+    }
+
+    public void SetTakingDamage(bool state)
+    {
+        takingDamage = state;
+        if (state)
+        {
+            StopAllCoroutines();
+            canAttack = false;
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Attack_Bow");
+        }
+        else
+        {
+            StartCoroutine(ResetAttackAfterDamage());
+        }
+    }
+
+    IEnumerator ResetAttackAfterDamage()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canAttack = true;
     }
 
     IEnumerator AttackCooldown()
@@ -73,7 +105,6 @@ public class PlayerAttack : MonoBehaviour
         if (arrowPrefab == null) return;
 
         bool facingLeft = transform.localScale.x < 0f;
-
         Vector3 spawnPos = transform.position + new Vector3(facingLeft ? -1.0f : 1.0f, 0f, 0f);
         Quaternion spawnRot = Quaternion.identity;
 

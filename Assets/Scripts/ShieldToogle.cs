@@ -31,7 +31,7 @@ public class ShieldToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && !isOnCooldown)
+        if (Input.GetKeyDown(KeyCode.F) && !isOnCooldown && !isActive)
             ToggleShield(true);
 
         if (isActive)
