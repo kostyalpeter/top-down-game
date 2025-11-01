@@ -4,11 +4,9 @@ using TMPro;
 
 public class FPSSliderMenu : MonoBehaviour
 {
-    [Header("Beállítások")]
     public int minFPS = 30;
     public int maxFPS = 1000;
 
-    [Header("UI elemek")]
     public Slider fpsSlider;
     public TMP_Text fpsText;
 

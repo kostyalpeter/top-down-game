@@ -3,22 +3,17 @@ using TMPro;
 
 public class BookInteract : MonoBehaviour
 {
-    [Header("UI elemek")]
     public GameObject bookUI;
 
-    [Header("1. oldal szövegek")]
     public TMP_Text firstPageText1;
     public TMP_Text firstPageText2;
 
-    [Header("2. oldal szövegek")]
     public TMP_Text secondPageText1;
     public TMP_Text secondPageText2;
 
-    [Header("3. oldal szövegek")]
     public TMP_Text thirdPageText1;
     public TMP_Text thirdPageText2;
 
-    [Header("Egyéb beállítások")]
     public Transform player;
     public float interactDistance = 2f;
 

@@ -10,18 +10,38 @@ public class InventoryContoller : MonoBehaviour
     public GameObject[] itemPrefabs;
     void Start()
     {
+        inventoryPanel.SetActive(false);
+
         itemDictionary = FindObjectOfType<ItemDictionary>();
 
-        // for(int i = 0; i < slotCount; i++)
-        // {
-        //     Slot slot = Instantiate(slotPrefab, inventoryPanel.transform).GetComponent<Slot>();
-        //     if( i < itemPrefabs.Length)
-        //     {
-        //         GameObject item = Instantiate(itemPrefabs[i], slot.transform);
-        //         item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        //         slot.currentItem = item;
-        //     }
-        // }
+        for (int i = 0; i < slotCount; i++)
+        {
+            Slot slot = Instantiate(slotPrefab, inventoryPanel.transform).GetComponent<Slot>();
+            if (i < itemPrefabs.Length)
+            {
+                GameObject item = Instantiate(itemPrefabs[i], slot.transform);
+                item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                slot.currentItem = item;
+            }
+        }
+    }
+
+    public bool AddItem(GameObject itemPrefab)
+    {
+        foreach (Transform slotTranform in inventoryPanel.transform)
+        {
+            Slot slot = slotTranform.GetComponent<Slot>();
+            if (slot != null && slot.currentItem == null)
+            {
+                GameObject newitem = Instantiate(itemPrefab, slot.transform);
+                newitem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                slot.currentItem = newitem;
+                return true;
+            }
+        }
+        
+        Debug.Log("Inventory is full!");
+        return false;
     }
 
     public List<InventorySaveData> GetInventoryItems()
@@ -65,6 +85,13 @@ public class InventoryContoller : MonoBehaviour
                     slot.currentItem = item;
                 }
             }
+        }
+    }
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         }
     }
 }
