@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerHealth : MonoBehaviour
@@ -17,6 +18,8 @@ public class PlayerHealth : MonoBehaviour
     private bool _isInvincible = false;
     private Animator _anim;
     private Rigidbody2D _rb;
+
+    public UnityEvent OnDeath;
 
     private static readonly int HitHash = Animator.StringToHash("Hit");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -76,8 +79,6 @@ public class PlayerHealth : MonoBehaviour
             _anim.SetTrigger(DieHash);
         }
 
-        if (GameManager.instance != null)
-            GameManager.instance.TriggerGameOver();
 
         if (_rb)
         {
@@ -94,6 +95,11 @@ public class PlayerHealth : MonoBehaviour
         {
             if (mb == this) continue;
             mb.enabled = false;
+        }
+        LivesCounter livesCounter = FindObjectOfType<LivesCounter>();
+        if (livesCounter != null)
+        {
+            livesCounter.Removelife(1);
         }
     }
 
