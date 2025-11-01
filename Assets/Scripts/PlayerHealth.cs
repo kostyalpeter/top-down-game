@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerHealth : MonoBehaviour
@@ -96,11 +97,20 @@ public class PlayerHealth : MonoBehaviour
             if (mb == this) continue;
             mb.enabled = false;
         }
+        
         LivesCounter livesCounter = FindObjectOfType<LivesCounter>();
         if (livesCounter != null)
         {
             livesCounter.Removelife(1);
         }
+
+        StartCoroutine(ReloadSceneAfterDelay());
+    }
+
+    private IEnumerator ReloadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private bool invincible = false;
