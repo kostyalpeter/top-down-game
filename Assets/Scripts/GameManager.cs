@@ -30,12 +30,6 @@ public class GameManager : MonoBehaviour
         if (gameOverText != null)
             gameOverText.gameObject.SetActive(true);
 
-        StartCoroutine(RestartAfterDelay());
     }
 
-    private IEnumerator RestartAfterDelay()
-    {
-        yield return new WaitForSeconds(restartDelay);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
 }

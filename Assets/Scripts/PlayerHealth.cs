@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
     private Rigidbody2D _rb;
 
     public UnityEvent OnDeath;
+    public UnityEvent OnRespawn;
 
     private static readonly int HitHash = Animator.StringToHash("Hit");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -66,8 +67,6 @@ public class PlayerHealth : MonoBehaviour
         if (attack != null)
             attack.SetTakingDamage(false);
     }
-    
-
 
     void Die()
     {
@@ -97,20 +96,47 @@ public class PlayerHealth : MonoBehaviour
             if (mb == this) continue;
             mb.enabled = false;
         }
-        
+
         LivesCounter livesCounter = FindObjectOfType<LivesCounter>();
         if (livesCounter != null)
         {
             livesCounter.Removelife(1);
         }
 
-        StartCoroutine(ReloadSceneAfterDelay());
+        StartCoroutine(RespawnAfterDelay());
     }
 
-    private IEnumerator ReloadSceneAfterDelay()
+    private IEnumerator RespawnAfterDelay()
     {
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        CurrentHealth = Mathf.Max(1, maxHealth);
+        Dead = false;
+
+        if (_anim)
+        {
+            _anim.ResetTrigger(DieHash);
+        }
+
+        if (_rb)
+        {
+            _rb.isKinematic = false;
+            _rb.linearVelocity = Vector2.zero;
+            _rb.angularVelocity = 0f;
+        }
+
+        var cols = GetComponentsInChildren<Collider2D>(true);
+        foreach (var c in cols) c.enabled = true;
+
+        var behaviours = GetComponentsInChildren<MonoBehaviour>(true);
+        foreach (var mb in behaviours)
+        {
+            if (mb == this) continue;
+            mb.enabled = true;
+        }
+
+        if (OnRespawn != null)
+            OnRespawn.Invoke();
     }
 
     private bool invincible = false;
