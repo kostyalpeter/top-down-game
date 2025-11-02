@@ -28,6 +28,23 @@ public class InventoryContoller : MonoBehaviour
 
     public bool AddItem(GameObject itemPrefab)
     {
+        Item ItemToAdd = itemPrefab.GetComponent<Item>();
+        if (ItemToAdd == null) return false;
+
+        foreach (Transform slotTranform in inventoryPanel.transform)
+        {
+            Slot slot = slotTranform.GetComponent<Slot>();
+            if (slot != null && slot.currentItem != null)
+            {
+                Item slotItem = slot.currentItem.GetComponent<Item>();
+                if (slotItem != null && slotItem.ID == ItemToAdd.ID)
+                {
+                    slotItem.AddToStack(1);
+                    return true;
+                }
+            }
+        }
+
         foreach (Transform slotTranform in inventoryPanel.transform)
         {
             Slot slot = slotTranform.GetComponent<Slot>();
@@ -39,7 +56,7 @@ public class InventoryContoller : MonoBehaviour
                 return true;
             }
         }
-        
+
         Debug.Log("Inventory is full!");
         return false;
     }
@@ -53,7 +70,7 @@ public class InventoryContoller : MonoBehaviour
             if (slot.currentItem != null)
             {
                 Item item = slot.currentItem.GetComponent<Item>();
-                invData.Add(new InventorySaveData { itemID = item.ID, slotIndex = slotTransform.GetSiblingIndex() });
+                invData.Add(new InventorySaveData { itemID = item.ID, slotIndex = slotTransform.GetSiblingIndex(), quantity = item.quantity });
 
             }
         }
@@ -82,6 +99,15 @@ public class InventoryContoller : MonoBehaviour
                 {
                     GameObject item = Instantiate(itemPrefab, slot.transform);
                     item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+                    Item itemComponent = item.GetComponent<Item>();
+                    if (itemComponent != null)
+                    {
+                        itemComponent.quantity = data.quantity;
+                        // UpdateQuantityDisplay is not public; ensure Item updates its display via the quantity setter
+                    }
+
+
                     slot.currentItem = item;
                 }
             }
@@ -89,7 +115,7 @@ public class InventoryContoller : MonoBehaviour
     }
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         }

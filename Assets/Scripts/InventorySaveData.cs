@@ -7,6 +7,7 @@ using UnityEngine;
     public class InventorySaveData : MonoBehaviour
     {
         public int itemID;
-        public int slotIndex;
+    public int slotIndex;
+    public int quantity = 1;
     }
 

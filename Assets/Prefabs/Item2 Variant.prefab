@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 3965377167729571953, guid: f424ec8d30cba3f41a31788df68d5f59, type: 3}
+    - target: {fileID: 3493242972365463922, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
+      propertyPath: Name
+      value: Stone2
+      objectReference: {fileID: 0}
     - target: {fileID: 3988760804038979223, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_Name
       value: Item2 Variant
@@ -42,11 +46,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_LocalPosition.x
