@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -98,26 +99,80 @@ public class PlayerHealth : MonoBehaviour
         }
 
         LivesCounter livesCounter = FindObjectOfType<LivesCounter>();
+        bool isGameOver = false;
+
         if (livesCounter != null)
         {
             livesCounter.Removelife(1);
+
+            int? remaining = TryGetRemainingLives(livesCounter);
+            if (remaining.HasValue && remaining.Value <= 0)
+            {
+                isGameOver = true;
+            }
+        }
+
+        if (isGameOver)
+        {
+            if (OnDeath != null)
+                OnDeath.Invoke();
+            return;
         }
 
         StartCoroutine(RespawnAfterDelay());
+    }
+
+    private int? TryGetRemainingLives(object livesCounter)
+    {
+        if (livesCounter == null) return null;
+        Type t = livesCounter.GetType();
+
+        string[] propNames = { "Lives", "CurrentLives", "currentLives", "remainingLives", "RemainingLives", "lives" };
+        foreach (var name in propNames)
+        {
+            PropertyInfo p = t.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (p != null && p.PropertyType == typeof(int))
+                return (int)p.GetValue(livesCounter);
+        }
+
+        string[] fieldNames = { "Lives", "lives", "currentLives", "remainingLives" };
+        foreach (var name in fieldNames)
+        {
+            FieldInfo f = t.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (f != null && f.FieldType == typeof(int))
+                return (int)f.GetValue(livesCounter);
+        }
+
+        string[] methodNames = { "GetLives", "GetRemainingLives", "RemainingLives", "GetCurrentLives" };
+        foreach (var name in methodNames)
+        {
+            MethodInfo m = t.GetMethod(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+            if (m != null && m.ReturnType == typeof(int))
+                return (int)m.Invoke(livesCounter, null);
+        }
+
+        return null;
     }
 
     private IEnumerator RespawnAfterDelay()
     {
         yield return new WaitForSeconds(5f);
 
+        // Reset health and state
         CurrentHealth = Mathf.Max(1, maxHealth);
         Dead = false;
 
+        // Reset animator
         if (_anim)
         {
+            _anim.Rebind();
+            _anim.Update(0f);
+            _anim.Play("Idle", 0, 0f);
             _anim.ResetTrigger(DieHash);
+            _anim.ResetTrigger(HitHash);
         }
 
+        // Reset physics
         if (_rb)
         {
             _rb.isKinematic = false;
@@ -125,6 +180,7 @@ public class PlayerHealth : MonoBehaviour
             _rb.angularVelocity = 0f;
         }
 
+        // Re-enable colliders and behaviors
         var cols = GetComponentsInChildren<Collider2D>(true);
         foreach (var c in cols) c.enabled = true;
 
@@ -135,8 +191,18 @@ public class PlayerHealth : MonoBehaviour
             mb.enabled = true;
         }
 
+        // Add 2 seconds of invincibility
+        invincible = true;
+        StartCoroutine(DisableInvincibilityAfterDelay(2f));
+
         if (OnRespawn != null)
             OnRespawn.Invoke();
+    }
+
+    private IEnumerator DisableInvincibilityAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        invincible = false;
     }
 
     private bool invincible = false;
