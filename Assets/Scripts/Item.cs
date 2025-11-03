@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -54,5 +55,10 @@ public class Item : MonoBehaviour
         {
             ItemPickupUIController.Instance.ShowItemPickup(Name, itemIcon);
         }
+    }
+
+    internal GameObject CloneItem(int splitAmount)
+    {
+        throw new NotImplementedException();
     }
 }

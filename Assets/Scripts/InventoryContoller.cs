@@ -8,6 +8,8 @@ public class InventoryContoller : MonoBehaviour
     public GameObject slotPrefab;
     public int slotCount;
     public GameObject[] itemPrefabs;
+
+    public static InventoryContoller Instance { get; private set; }
     void Start()
     {
         inventoryPanel.SetActive(false);
@@ -26,6 +28,16 @@ public class InventoryContoller : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    } 
     public bool AddItem(GameObject itemPrefab)
     {
         Item ItemToAdd = itemPrefab.GetComponent<Item>();
@@ -101,10 +113,14 @@ public class InventoryContoller : MonoBehaviour
                     item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
                     Item itemComponent = item.GetComponent<Item>();
-                    if (itemComponent != null)
+                    if(itemComponent != null && data.quantity > 1)
                     {
                         itemComponent.quantity = data.quantity;
-                        // UpdateQuantityDisplay is not public; ensure Item updates its display via the quantity setter
+                        var updateMethod = itemComponent.GetType().GetMethod("UpdateQuantityDisplay", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                        if (updateMethod != null)
+                        {
+                            updateMethod.Invoke(itemComponent, null);
+                        }
                     }
 
 
