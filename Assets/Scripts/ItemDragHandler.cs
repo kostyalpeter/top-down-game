@@ -49,11 +49,7 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 Item targetItem = DropSlot.currentItem.GetComponent<Item>();
 
                 if (draggedItem.ID == targetItem.ID)
-                {
-                    targetItem.AddToStack(draggedItem.quantity);
-                    originalSlot.currentItem = null;
-                    Destroy(gameObject);
-                }
+                {}
                 else
                 {
                     DropSlot.currentItem.transform.SetParent(originalSlot.transform);

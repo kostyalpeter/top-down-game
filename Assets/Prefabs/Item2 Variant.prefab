@@ -11,10 +11,18 @@ PrefabInstance:
     - target: {fileID: -3008784535651771166, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 3965377167729571953, guid: f424ec8d30cba3f41a31788df68d5f59, type: 3}
+      objectReference: {fileID: -1192541474057205494, guid: 777b1ac81fcca624cad18bd2447ed950, type: 3}
+    - target: {fileID: -3008784535651771166, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493242972365463922, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
+      propertyPath: ID
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3493242972365463922, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: Name
-      value: Stone2
+      value: GreenApple
       objectReference: {fileID: 0}
     - target: {fileID: 3988760804038979223, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_Name
@@ -46,11 +54,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4838104298862192014, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -103,7 +111,7 @@ PrefabInstance:
     - target: {fileID: 6957100697320594291, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 3965377167729571953, guid: f424ec8d30cba3f41a31788df68d5f59, type: 3}
+      objectReference: {fileID: -1192541474057205494, guid: 777b1ac81fcca624cad18bd2447ed950, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

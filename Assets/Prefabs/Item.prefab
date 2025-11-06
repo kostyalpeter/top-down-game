@@ -32,7 +32,7 @@ RectTransform:
   m_GameObject: {fileID: 3988760804038979223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2764313508943772}
@@ -41,7 +41,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1667708195142450593
 CanvasRenderer:
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4725852135258441693, guid: f424ec8d30cba3f41a31788df68d5f59, type: 3}
+  m_Sprite: {fileID: 7293598183456022363, guid: 3a686bab5b644ab4895843eed56101eb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -118,7 +118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ID: 1
-  Name: Stone1
+  Name: Apple
+  quantity: 1
 --- !u!212 &-3008784535651771166
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -166,12 +167,12 @@ SpriteRenderer:
   m_SortingLayerID: -977548341
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4725852135258441693, guid: f424ec8d30cba3f41a31788df68d5f59, type: 3}
+  m_Sprite: {fileID: 7293598183456022363, guid: 3a686bab5b644ab4895843eed56101eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.13, y: 0.12}
+  m_Size: {x: 0.3, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -247,7 +248,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -8, y: 3.6}
+  m_AnchoredPosition: {x: -8, y: 3.600006}
   m_SizeDelta: {x: 10, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7976007466394941590
