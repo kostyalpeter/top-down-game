@@ -22,7 +22,10 @@ public class Item : MonoBehaviour
 
     private void UpdateQuantityDisplay()
     {
-        quantityText.text = quantity > 1 ? quantity.ToString() : "";
+        if (quantityText != null)
+        {
+            quantityText.text = quantity > 1 ? quantity.ToString() : "";
+        }
     }
 
     public void AddToStack(int amount)
@@ -38,7 +41,7 @@ public class Item : MonoBehaviour
         UpdateQuantityDisplay();
         return removed;
     }
-    
+
     public GameObject CLoneItem(int newQuantity)
     {
         GameObject clone = Instantiate(gameObject);
@@ -51,14 +54,9 @@ public class Item : MonoBehaviour
     public virtual void Pickup()
     {
         Sprite itemIcon = GetComponent<Image>().sprite;
-        if(ItemPickupUIController.Instance != null)
+        if (ItemPickupUIController.Instance != null)
         {
             ItemPickupUIController.Instance.ShowItemPickup(Name, itemIcon);
         }
-    }
-
-    internal GameObject CloneItem(int splitAmount)
-    {
-        throw new NotImplementedException();
     }
 }

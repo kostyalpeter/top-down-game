@@ -9,7 +9,8 @@ public class InventoryContoller : MonoBehaviour
     public int slotCount;
     public GameObject[] itemPrefabs;
 
-    public static InventoryContoller Instance { get; private set; }
+    public static InventoryContoller Instance { get; internal set; }
+
     void Start()
     {
         inventoryPanel.SetActive(false);
@@ -28,16 +29,6 @@ public class InventoryContoller : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    } 
     public bool AddItem(GameObject itemPrefab)
     {
         Item ItemToAdd = itemPrefab.GetComponent<Item>();

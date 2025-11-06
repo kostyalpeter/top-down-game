@@ -1,28 +1,12 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Transform originalParent;
     CanvasGroup canvasGroup;
 
     private InventoryContoller inventoryContoller;
-
-    private void Awake()
-    {
-        quantityText = GetComponentInChildren<TMP_Text>();
-        UpdateQuantityDisplay();
-    }
-
-    public void UpdateQuantityDisplay()
-    {
-        if (quantityText != null)
-        {
-            quantityText.text = UpdateQuantityDisplay > 1 ? UpdateQuantityDisplay.ToString() : "";
-        }
-    }
-
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -93,43 +77,5 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
 
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            SplitStack();
-        }
-    }
-
-    private void SplitStack()
-    {
-        Item item = GetComponent<Item>();
-        if (item == null || item.quantity <= 1) return;
-
-        int splitAmount = item.quantity / 2;
-        if (splitAmount <= 0) return;
-
-        item.RemoveFromStack(splitAmount);
-
-        GameObject newItem = item.CloneItem(splitAmount);
-
-        if (inventoryContoller == null || newItem == null) return;
-
-        foreach (Transform slotTransfrom in inventoryContoller.inventoryPanel.transform)
-        {
-            Slot slot = slotTransfrom.GetComponent<Slot>();
-            if (slot != null && slot.currentItem == null)
-            {
-                slot.currentItem = newItem;
-                newItem.transform.SetParent(slot.transform);
-                newItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                return;
-            }
-        }
-
-        item.AddToStack(splitAmount);
-        Destroy(newItem);
     }
 }
