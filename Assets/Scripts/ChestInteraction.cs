@@ -43,6 +43,5 @@ public class ChestInteraction : MonoBehaviour
         if (openChest != null)
             openChest.SetActive(true);
 
-        Debug.Log("🗝️ Chest opened!");
     }
 }
