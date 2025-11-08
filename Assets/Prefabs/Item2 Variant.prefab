@@ -25,6 +25,10 @@ PrefabInstance:
       value: GreenApple
       objectReference: {fileID: 0}
     - target: {fileID: 3988760804038979223, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3988760804038979223, guid: a4803476d16c1a34a8c898bd9474bdb4, type: 3}
       propertyPath: m_Name
       value: Item2 Variant
       objectReference: {fileID: 0}
