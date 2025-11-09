@@ -7,8 +7,8 @@ public class BreakableObject : MonoBehaviour
     private bool isBroken = false;
 
     public GameObject destroyEffectPrefab;
-    public GameObject spawnOnBreak; // ide húzod be, mit spawnoljon (pl. coin, xpOrb stb.)
-    public Transform spawnPoint;    // opcionális – ha máshonnan akarod, nem a középpontból
+    public GameObject spawnOnBreak;
+    public Transform spawnPoint;
 
     void Start()
     {
