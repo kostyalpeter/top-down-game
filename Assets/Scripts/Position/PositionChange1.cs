@@ -9,7 +9,7 @@ public class PositionChange1 : MonoBehaviour
     {
         if (collision.collider.CompareTag("CaveEnter"))
         {
-            transform.position = new Vector3((float)111.9, (float)127.65, 0);
+            transform.position = new Vector3((float)-50.68149, (float)-316.3313, 0);
         }
     }
 }
