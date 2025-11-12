@@ -7,6 +7,8 @@ TagManager:
   - Item
   - CaveEnter
   - CaveEnter2
+  - CaveEnter3
+  - CaveEnter4
   layers:
   - Default
   - TransparentFX
