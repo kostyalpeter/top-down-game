@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Data.Common;
+using TMPro;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -13,12 +16,6 @@ public class Slot : MonoBehaviour
             item.Use();
             currentItem.GetComponent<Item>().RemoveFromStack(1);
         }
-        if (item == null)
-        {
-            Destroy(currentItem);
-
-        }
-
     }
     public GameObject currentItem;
 }

@@ -59,4 +59,5 @@ public class Item : MonoBehaviour
             ItemPickupUIController.Instance.ShowItemPickup(Name, itemIcon);
         }
     }
+    
 }
