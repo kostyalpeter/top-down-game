@@ -7,7 +7,7 @@ public class ChestInteraction : MonoBehaviour
     [Header("Settings")]
     public GameObject closedChest;
     public GameObject openChest;
-    [SerializeField] public GameObject[] asd;
+    public GameObject asd;
     public float interactDistance = 2f;
 
     private Transform player;
