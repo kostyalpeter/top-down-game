@@ -1,21 +1,34 @@
-using System;
-using System.Collections;
-using System.Data.Common;
-using TMPro;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Slot : MonoBehaviour
-
 {
+    public GameObject currentItem;
+
     public void UseItem()
     {
-        IItem item = currentItem.GetComponent<IItem>();
-        if (item != null)
+        if (currentItem == null) return;
+
+        IItem itemInterface = currentItem.GetComponent<IItem>();
+        Item itemData = currentItem.GetComponent<Item>();
+
+        if (itemInterface != null)
         {
-            item.Use();
-            currentItem.GetComponent<Item>().RemoveFromStack(1);
+            itemInterface.Use();
+        }
+
+        if (itemData != null)
+        {
+            itemData.RemoveFromStack(1);
+            if (itemData.quantity <= 0)
+            {
+                Destroy(currentItem);
+                currentItem = null;
+            }
+        }
+        else
+        {
+            Destroy(currentItem);
+            currentItem = null;
         }
     }
-    public GameObject currentItem;
 }

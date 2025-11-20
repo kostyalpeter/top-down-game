@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ChestInteraction : MonoBehaviour
@@ -5,6 +7,7 @@ public class ChestInteraction : MonoBehaviour
     [Header("Settings")]
     public GameObject closedChest;
     public GameObject openChest;
+    [SerializeField] public GameObject[] asd;
     public float interactDistance = 2f;
 
     private Transform player;
@@ -19,6 +22,8 @@ public class ChestInteraction : MonoBehaviour
 
         if (openChest != null)
             openChest.SetActive(false);
+            asd.SetActive(false);
+
     }
 
     void Update()
@@ -42,6 +47,9 @@ public class ChestInteraction : MonoBehaviour
 
         if (openChest != null)
             openChest.SetActive(true);
+            asd.SetActive(true);
+
 
     }
 }
+
