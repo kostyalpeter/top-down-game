@@ -75,7 +75,7 @@ public class EnemyHealth : MonoBehaviour
 
         if (xpOrbPrefab != null)
         {
-            int orbCount = Random.Range(minOrbs, maxOrbs + 1);
+            int orbCount = Random.Range(minOrbs, maxOrbs);
 
             for (int i = 0; i < orbCount; i++)
             {

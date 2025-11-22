@@ -11,6 +11,8 @@ public class PlayerAttack : MonoBehaviour
     public GameObject arrowPrefab;
     public float arrowSpeed = 10f;
     public float attackCooldown = 0.6f;
+    public GameObject FireBallPrefab;
+
 
     private bool canAttack = true;
     private bool takingDamage = false;
@@ -35,6 +37,15 @@ public class PlayerAttack : MonoBehaviour
                 }
             }
             else if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Bow)
+            {
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+                {
+                    animator.ResetTrigger("Attack");
+                    animator.SetTrigger("Attack_Bow");
+                    StartCoroutine(AttackCooldown());
+                }
+            }
+            else if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Magic)
             {
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
                 {

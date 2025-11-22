@@ -38,7 +38,6 @@ public class EnemyAi : MonoBehaviour
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj == null)
         {
-            Debug.LogError("[EnemyAi] Nincs Player taggel ellátott objektum a jelenetben.");
             enabled = false;
             return;
         }

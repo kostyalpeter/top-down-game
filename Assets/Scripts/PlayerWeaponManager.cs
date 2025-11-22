@@ -4,7 +4,7 @@ public class PlayerWeaponManager : MonoBehaviour
 {
     public static PlayerWeaponManager Instance;
 
-    public enum WeaponType { Sword, Bow }
+    public enum WeaponType { Sword, Bow, Magic }
     public WeaponType currentWeapon = WeaponType.Sword;
 
     void Awake()
