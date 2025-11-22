@@ -11,7 +11,10 @@ public class PlayerAttack : MonoBehaviour
     public GameObject arrowPrefab;
     public float arrowSpeed = 10f;
     public float attackCooldown = 0.6f;
-    public GameObject FireBallPrefab;
+
+    public GameObject fireballPrefab;
+    public float FireBallSpeed = 10f;
+    public float MagicAttackCooldown = 0.6f;
 
 
     private bool canAttack = true;
@@ -113,7 +116,17 @@ public class PlayerAttack : MonoBehaviour
 
     public void ShootArrow()
     {
-        if (arrowPrefab == null) return;
+        var wm = PlayerWeaponManager.Instance;
+        if (wm == null) return;
+
+        if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Magic)
+        {
+            ShootMagic();
+            return;
+        }
+
+        if (wm.currentWeapon != PlayerWeaponManager.WeaponType.Bow) return;
+        if (fireballPrefab == null) return;
 
         bool facingLeft = transform.localScale.x < 0f;
         Vector3 spawnPos = transform.position + new Vector3(facingLeft ? -1.0f : 1.0f, 0f, 0f);
@@ -135,6 +148,35 @@ public class PlayerAttack : MonoBehaviour
             rb.linearVelocity = dir * arrowSpeed;
         }
     }
+
+    public void ShootMagic()
+    {
+        var wm = PlayerWeaponManager.Instance;
+        if (wm == null) return;
+        if (wm.currentWeapon != PlayerWeaponManager.WeaponType.Magic) return;
+        if (fireballPrefab == null) return;
+
+        bool facingLeft = transform.localScale.x < 0f;
+        Vector3 spawnPos = transform.position + new Vector3(facingLeft ? -1.0f : 1.0f, 0f, 0f);
+        Quaternion spawnRot = Quaternion.identity;
+
+        GameObject FireBall = Instantiate(fireballPrefab, spawnPos, spawnRot);
+
+        if (facingLeft)
+        {
+            Vector3 scale = FireBall.transform.localScale;
+            scale.x *= -1;
+            FireBall.transform.localScale = scale;
+        }
+
+        Rigidbody2D rb = FireBall.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
+            rb.linearVelocity = dir * FireBallSpeed;
+        }
+    }
+
 
     void OnDrawGizmos()
     {
