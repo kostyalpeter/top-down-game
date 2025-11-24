@@ -60,13 +60,11 @@ public class NPCBubble : MonoBehaviour
         bubbleObject.SetActive(true);
         SetupCanvas();
 
-        // Első szöveg mutatása
         if (bubbleText1 != null)
             bubbleText1.gameObject.SetActive(true);
         if (bubbleText2 != null)
             bubbleText2.gameObject.SetActive(false);
 
-        Debug.Log("💬 Bubble Text 1 látszik!");
     }
 
     private void NextText()
@@ -79,11 +77,9 @@ public class NPCBubble : MonoBehaviour
                 bubbleText2.gameObject.SetActive(true);
 
             currentIndex = 1;
-            Debug.Log("💬 Bubble Text 2 látszik!");
         }
         else
         {
-            Debug.Log("🗨️ Marad a második szöveg, nem tűnik el.");
         }
     }
 
@@ -100,7 +96,6 @@ public class NPCBubble : MonoBehaviour
         if (bubbleText2 != null)
             bubbleText2.gameObject.SetActive(false);
 
-        Debug.Log("💭 Buborék és szövegek eltűntek, mert kimentél a hatótávból.");
     }
 
     private void SetupCanvas()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DeathOrb : MonoBehaviour
 {
-    public int damage = 5;
+    public int OrbDamage = 5;
     private Transform player;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -11,7 +11,7 @@ public class DeathOrb : MonoBehaviour
         {
             PlayerHealth health = other.GetComponent<PlayerHealth>();
             if (health != null)
-                health.TakeDamage(damage);
+                health.TakeDamage(OrbDamage);
             Destroy(gameObject);
         }
     }
