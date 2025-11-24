@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class WizardTrigger : MonoBehaviour
 {
@@ -60,6 +61,7 @@ public class WizardTrigger : MonoBehaviour
 
             {
                 Magic.SetActive(true);
+                Destroy(bubbleObject);
             }
 
             return;
