@@ -11,7 +11,6 @@ public class BossAi : MonoBehaviour
     public float attackCooldown = 1f;
     public LayerMask obstacleMask;
     public float roamDelay = 2f;
-
     [Header("Combat Settings")]
     public int attackDamage = 20;
 
@@ -185,4 +184,5 @@ public class BossAi : MonoBehaviour
 
         return hit.collider != null && hit.collider.CompareTag("Player");
     }
+
 }
