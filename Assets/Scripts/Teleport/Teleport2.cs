@@ -7,7 +7,6 @@ public class Teleport2 : MonoBehaviour
 {
     [SerializeField] private float interactDistance = 2f;
     private Transform player;
-    public float tp;
 
     void Start()
     {
@@ -28,7 +27,6 @@ public class Teleport2 : MonoBehaviour
 
     private void TeleportPlayer()
     {
-        player.transform.position = new Vector3((float)24.42643, (float)160.3092, 0);
-
+        player.transform.position = new Vector3((float)30.47, (float)185.21, 0);
     }
 }
