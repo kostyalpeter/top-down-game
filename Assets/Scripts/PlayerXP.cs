@@ -9,6 +9,7 @@ public class PlayerXP : MonoBehaviour
     public int currentLevel = 1;
     public int baseXPToNextLevel = 100;
     public float xpGrowth = 1.5f;
+    public GameObject magicXPObject;
 
     [Header("UI elemek")]
     public Slider xpBar;
@@ -48,5 +49,13 @@ public class PlayerXP : MonoBehaviour
 
         if (levelText != null)
             levelText.text = "Lvl " + currentLevel;
+    }
+    public void MagicXP()
+    {
+        if (currentLevel == 5)
+        {
+            magicXPObject.SetActive(true);
+        }
+        
     }
 }
