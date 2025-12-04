@@ -6,7 +6,7 @@ public class CoinManager : MonoBehaviour
     public static CoinManager Instance;
     public TMP_Text coinText;
     public GameObject coin;
-    public int coins = 0;
+    public static int coins = 0;
 
     public void Awake()
     {
