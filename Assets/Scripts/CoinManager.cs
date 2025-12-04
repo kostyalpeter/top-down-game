@@ -3,10 +3,11 @@ using TMPro;
 
 public class CoinManager : MonoBehaviour
 {
-    public static CoinManager Instance;
+    public static  CoinManager Instance;
     public TMP_Text coinText;
     public GameObject coin;
     public static int coins = 0;
+    Shop shop;
 
     public void Awake()
     {
@@ -25,5 +26,12 @@ public class CoinManager : MonoBehaviour
         if (coinText != null)
             coinText.text = ":" + coins;
             coin.SetActive(true);
+    }
+    public void ItemBuying()
+    {
+        if (coins == Shop.price)
+        {
+            shop.Coin();
+        }
     }
 }
