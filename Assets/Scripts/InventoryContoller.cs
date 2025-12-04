@@ -11,9 +11,24 @@ public class InventoryContoller : MonoBehaviour
 
     public static InventoryContoller Instance { get; internal set; }
 
+    [System.Obsolete]
     void Start()
     {
         inventoryPanel.SetActive(false);
+
+        SetupInventory();
+    }
+
+    [System.Obsolete]
+    void SetupInventory()
+    {
+        if (inventoryPanel.transform.childCount > 0)
+        {
+            for (int i = inventoryPanel.transform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(inventoryPanel.transform.GetChild(i).gameObject);
+            }
+        }
 
         itemDictionary = FindObjectOfType<ItemDictionary>();
 
@@ -60,7 +75,6 @@ public class InventoryContoller : MonoBehaviour
             }
         }
 
-        Debug.Log("Inventory is full!");
         return false;
     }
 
@@ -104,7 +118,7 @@ public class InventoryContoller : MonoBehaviour
                     item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
                     Item itemComponent = item.GetComponent<Item>();
-                    if(itemComponent != null && data.quantity > 1)
+                    if (itemComponent != null && data.quantity > 1)
                     {
                         itemComponent.quantity = data.quantity;
                         var updateMethod = itemComponent.GetType().GetMethod("UpdateQuantityDisplay", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
@@ -113,8 +127,6 @@ public class InventoryContoller : MonoBehaviour
                             updateMethod.Invoke(itemComponent, null);
                         }
                     }
-
-
                     slot.currentItem = item;
                 }
             }
@@ -125,6 +137,23 @@ public class InventoryContoller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        }
+    }
+
+    public void LevelUp()
+    {
+        slotCount += 1;
+        ExpandInventory();
+    }
+
+    private void ExpandInventory()
+    {
+        int currentSlots = inventoryPanel.transform.childCount;
+        int slotsToAdd = slotCount - currentSlots;
+
+        for (int i = 0; i < slotsToAdd; i++)
+        {
+            Instantiate(slotPrefab, inventoryPanel.transform);
         }
     }
 }

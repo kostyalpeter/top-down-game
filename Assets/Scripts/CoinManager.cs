@@ -6,9 +6,9 @@ public class CoinManager : MonoBehaviour
     public static CoinManager Instance;
     public TMP_Text coinText;
     public GameObject coin;
-    private int coins = 0;
+    public int coins = 0;
 
-    void Awake()
+    public void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -20,7 +20,7 @@ public class CoinManager : MonoBehaviour
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (coinText != null)
             coinText.text = ":" + coins;
