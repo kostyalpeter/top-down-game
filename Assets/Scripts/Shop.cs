@@ -1,24 +1,30 @@
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-
-
+using TMPro;
 
 public class Shop : MonoBehaviour
 {
     public float interactDistance = 2f;
-    private Transform player;
     public static int price = 1;
     public GameObject item;
-
-    public void Coin()
+    Transform player;
+    NotEnoughText NotEnoughText;
+    HintTrigger hint;
+    public void Start()
     {
-        Debug.Log("asd");
-        // float dist = Vector2.Distance(transform.position, player.position);
-        // if (dist <= interactDistance && Input.GetKeyDown(KeyCode.C))
-        // {
-        //     Destroy(item);
-        // }
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
+    public void Update()
+    {
+        float dist = Vector2.Distance(transform.position, player.position);
+        if (dist <= interactDistance && Input.GetKeyDown(KeyCode.C))
+        {
+            if (CoinManager.coins >= price)
+            {
+                CoinManager.coins -= price;
+                CoinManager.Instance.UpdateUI();
+                InventoryContoller.Instance.AddItem(item);
+            }
+        }
+    }
 }

@@ -9,6 +9,10 @@ public class InventoryContoller : MonoBehaviour
     public int slotCount;
     public GameObject[] itemPrefabs;
 
+    void Awake()
+    {
+        Instance = this;
+    }
     public static InventoryContoller Instance { get; internal set; }
 
     [System.Obsolete]

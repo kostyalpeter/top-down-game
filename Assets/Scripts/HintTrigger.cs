@@ -3,12 +3,13 @@ using TMPro;
 
 public class HintTrigger : MonoBehaviour
 {
-    [SerializeField] private TMP_Text hintText;
+    [SerializeField] public TMP_Text hintText;
     [SerializeField] private string message = "Press C to interact";
     [SerializeField] private float showDistance = 2f;
 
     private Transform player;
     private bool isVisible = false;
+    NotEnoughText notEnoughText;
 
     void Start()
     {
@@ -30,14 +31,14 @@ public class HintTrigger : MonoBehaviour
             HideHint();
     }
 
-    private void ShowHint()
+    public void ShowHint()
     {
         isVisible = true;
         hintText.text = message;
         hintText.gameObject.SetActive(true);
     }
 
-    private void HideHint()
+    public void HideHint()
     {
         isVisible = false;
         hintText.gameObject.SetActive(false);

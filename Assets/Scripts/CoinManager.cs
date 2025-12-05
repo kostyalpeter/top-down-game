@@ -31,7 +31,7 @@ public class CoinManager : MonoBehaviour
     {
         if (coins == Shop.price)
         {
-            shop.Coin();
+            shop.Update();
         }
     }
 }
