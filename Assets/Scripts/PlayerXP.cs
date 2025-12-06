@@ -10,6 +10,8 @@ public class PlayerXP : MonoBehaviour
     public int baseXPToNextLevel = 50;
     public float xpGrowth = 1f;
     public GameObject Object;
+    public GameObject Object2;
+
     public InventoryContoller inventoryContoller;
 
     [Header("UI elemek")]
@@ -37,6 +39,7 @@ public class PlayerXP : MonoBehaviour
         UpdateUI();
         XPLevel5();
         XPLevel10();
+        XPLevel15();
     }
 
     void LevelUp()
@@ -66,10 +69,21 @@ public class PlayerXP : MonoBehaviour
         {
             inventoryContoller.LevelUp();
         }
+    }
+    private void XPLevel15()
+    {
+        if (currentLevel == 15)
+        {
+            asd2();
+        }
 
     }
     private void asd()
     {
         Object.SetActive(false);
+    }
+    private void asd2()
+    {
+        Object2.SetActive(false);
     }
 }
