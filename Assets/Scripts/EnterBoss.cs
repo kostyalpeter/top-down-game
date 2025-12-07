@@ -5,8 +5,6 @@ public class EnterBoss : MonoBehaviour
     private Transform player;
     public float interactDistance = 2f;
     public GameObject rocks;
-    public GameObject barriers;
-    public GameObject target;
 
     void Start()
     {
@@ -27,11 +25,4 @@ public class EnterBoss : MonoBehaviour
         rocks.SetActive(false);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject == target)
-        {
-            barriers.SetActive(true);
-        }
-    }
 }

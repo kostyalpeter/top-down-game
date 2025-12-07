@@ -9,6 +9,7 @@ TagManager:
   - CaveEnter2
   - CaveEnter3
   - CaveEnter4
+  - TriggerOnly
   layers:
   - Default
   - TransparentFX
