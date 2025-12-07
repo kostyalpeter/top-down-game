@@ -24,7 +24,6 @@ public class EnemyHealth : MonoBehaviour
     private Rigidbody2D rb;
 
     public float CurrentHealth { get; internal set; }
-    public End end;
 
     void Start()
     {
@@ -58,7 +57,6 @@ public class EnemyHealth : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-
 
         if (rb != null)
         {
@@ -94,6 +92,7 @@ public class EnemyHealth : MonoBehaviour
                     xpOrb.xpAmount = Mathf.RoundToInt(Random.Range(xpRange.x, xpRange.y));
                 }
             }
+            
         }
 
         Destroy(gameObject, 2f);
