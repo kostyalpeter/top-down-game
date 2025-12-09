@@ -1,10 +1,13 @@
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public int maxHealth = 100;
     private int currentHealth;
+    public GameObject boss;
 
     public int GetCurrentHealth() => currentHealth;
 
@@ -16,7 +19,7 @@ public class EnemyHealth : MonoBehaviour
     public int maxOrbs = 3;
     public Vector2 dropOffsetRange = new Vector2(0.5f, 0.5f);
     public Vector2 xpRange = new Vector2(5, 15);
-    
+
 
     [Header("Components")]
     private Animator animator;
@@ -50,7 +53,14 @@ public class EnemyHealth : MonoBehaviour
             animator.SetTrigger("Hurt");
 
         if (currentHealth <= 0)
+        {
             Die();
+        }
+        if (currentHealth <= 0 && boss != null)
+        {
+            Die();
+        }
+
     }
 
     void Die()
@@ -92,7 +102,6 @@ public class EnemyHealth : MonoBehaviour
                     xpOrb.xpAmount = Mathf.RoundToInt(Random.Range(xpRange.x, xpRange.y));
                 }
             }
-            
         }
 
         Destroy(gameObject, 2f);
