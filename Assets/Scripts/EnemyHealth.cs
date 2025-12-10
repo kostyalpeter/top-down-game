@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,7 @@ public class EnemyHealth : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
     public GameObject boss;
+    public GameObject WinText;
 
     public int GetCurrentHealth() => currentHealth;
 
@@ -58,7 +60,8 @@ public class EnemyHealth : MonoBehaviour
         }
         if (currentHealth <= 0 && boss != null)
         {
-            Die();
+            Die(); 
+            WinText.SetActive(true);
         }
 
     }
