@@ -111,6 +111,7 @@ public class EnemyAi : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
+        
         while (state == State.Attacking)
         {
             if (PlayerIsDead())
@@ -158,8 +159,6 @@ public class EnemyAi : MonoBehaviour
             yield return null;
         }
     }
-
-
     private bool PlayerIsDead()
     {
         if (player == null) return true;
