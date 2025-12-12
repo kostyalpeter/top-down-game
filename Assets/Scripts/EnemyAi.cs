@@ -111,7 +111,7 @@ public class EnemyAi : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
-        
+
         while (state == State.Attacking)
         {
             if (PlayerIsDead())
@@ -132,7 +132,6 @@ public class EnemyAi : MonoBehaviour
             if (canAttack)
             {
                 canAttack = false;
-
                 if (animator != null)
                 {
                     animator.ResetTrigger("Attack");
@@ -146,7 +145,6 @@ public class EnemyAi : MonoBehaviour
                     var shieldActive = playerHealth.GetType().GetField("invincible", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     if (shieldActive != null && !(bool)shieldActive.GetValue(playerHealth))
                     {
-                        playerHealth.TakeDamage(attackDamage);
                     }
                 }
 
@@ -183,5 +181,11 @@ public class EnemyAi : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, obstacleMask | (1 << player.gameObject.layer));
 
         return hit.collider != null && hit.collider.CompareTag("Player");
+    }
+    public void damage()
+    {
+        float distance = Vector2.Distance(transform.position, player.position);
+        if (distance < attackRange)
+            playerHealth.TakeDamage(attackDamage);
     }
 }

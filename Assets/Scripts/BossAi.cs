@@ -144,7 +144,6 @@ public class BossAi : MonoBehaviour
                     var shieldActive = playerHealth.GetType().GetField("invincible", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     if (shieldActive != null && !(bool)shieldActive.GetValue(playerHealth))
                     {
-                        playerHealth.TakeDamage(attackDamage);
                     }
                 }
 
@@ -184,5 +183,10 @@ public class BossAi : MonoBehaviour
 
         return hit.collider != null && hit.collider.CompareTag("Player");
     }
-
+    public void damage()
+    {
+        float distance = Vector2.Distance(transform.position, player.position);
+        if (distance < attackRange)
+            playerHealth.TakeDamage(attackDamage);
+    }
 }

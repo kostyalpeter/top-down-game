@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerHealth : MonoBehaviour
@@ -23,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
 
     public UnityEvent OnDeath;
     public UnityEvent OnRespawn;
+    public TMP_Text GameOverText;
 
     private static readonly int HitHash = Animator.StringToHash("Hit");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -38,7 +40,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (Dead) return;
-         if (invincible) return;
+        if (invincible) return;
         if (Time.time - _lastHitTime < invulnAfterHit) return;
         _lastHitTime = Time.time;
 
@@ -158,11 +160,9 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
 
-        // Reset health and state
         CurrentHealth = Mathf.Max(1, maxHealth);
         Dead = false;
 
-        // Reset animator
         if (_anim)
         {
             _anim.Rebind();
@@ -172,7 +172,6 @@ public class PlayerHealth : MonoBehaviour
             _anim.ResetTrigger(HitHash);
         }
 
-        // Reset physics
         if (_rb)
         {
             _rb.isKinematic = false;
@@ -180,7 +179,6 @@ public class PlayerHealth : MonoBehaviour
             _rb.angularVelocity = 0f;
         }
 
-        // Re-enable colliders and behaviors
         var cols = GetComponentsInChildren<Collider2D>(true);
         foreach (var c in cols) c.enabled = true;
 
@@ -191,7 +189,6 @@ public class PlayerHealth : MonoBehaviour
             mb.enabled = true;
         }
 
-        // Add 2 seconds of invincibility
         invincible = true;
         StartCoroutine(DisableInvincibilityAfterDelay(2f));
 
@@ -238,5 +235,12 @@ public class PlayerHealth : MonoBehaviour
 
         healAmount = Mathf.Max(0, healAmount);
         CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
+
+
     }
+        public void ZeroLife()
+    {
+        GameOverText.gameObject.SetActive(true);
+    }
+
 }

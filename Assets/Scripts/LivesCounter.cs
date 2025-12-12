@@ -6,13 +6,13 @@ public class LivesCounter : MonoBehaviour
     [SerializeField] private int _maxnumOfLives = 3;
     [SerializeField] private GameObject livesPrefab;
     [SerializeField] private Transform livesParent;
-
     private static LivesCounter _instance;
     private static int _persistedLives = -1;
 
     private int _numOfLives;
 
     public UnityEvent OutOfLives;
+    PlayerHealth playerHealth;
 
     public int NumOfLives
     {
@@ -54,6 +54,10 @@ public class LivesCounter : MonoBehaviour
     public void Removelife(int num = 1)
     {
         NumOfLives -= num;
+        if (NumOfLives == 0)
+        {
+            playerHealth.ZeroLife();
+        }
     }
 
     private void RefreshUI()
@@ -64,4 +68,5 @@ public class LivesCounter : MonoBehaviour
         for (int i = 0; i < _numOfLives; i++)
             Instantiate(livesPrefab, livesParent);
     }
+
 }

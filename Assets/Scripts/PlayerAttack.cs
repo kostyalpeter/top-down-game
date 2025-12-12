@@ -5,7 +5,7 @@ public class PlayerAttack : MonoBehaviour
 {
     public Animator animator;
     public GameObject attackPoint;
-    public float radius = 0.5f;
+    public float radius = 0.7f;
     public LayerMask enemyLayer;
 
     public GameObject arrowPrefab;
