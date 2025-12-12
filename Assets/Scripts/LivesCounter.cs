@@ -12,7 +12,6 @@ public class LivesCounter : MonoBehaviour
     private int _numOfLives;
 
     public UnityEvent OutOfLives;
-    PlayerHealth playerHealth;
 
     public int NumOfLives
     {
@@ -56,7 +55,7 @@ public class LivesCounter : MonoBehaviour
         NumOfLives -= num;
         if (NumOfLives == 0)
         {
-            playerHealth.ZeroLife();
+            ZeroLife();
         }
     }
 
@@ -67,6 +66,10 @@ public class LivesCounter : MonoBehaviour
 
         for (int i = 0; i < _numOfLives; i++)
             Instantiate(livesPrefab, livesParent);
+    }
+    public void ZeroLife()
+    {
+        Time.timeScale = 0f;
     }
 
 }

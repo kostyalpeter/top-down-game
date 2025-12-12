@@ -24,7 +24,6 @@ public class PlayerHealth : MonoBehaviour
 
     public UnityEvent OnDeath;
     public UnityEvent OnRespawn;
-    public TMP_Text GameOverText;
 
     private static readonly int HitHash = Animator.StringToHash("Hit");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -237,10 +236,6 @@ public class PlayerHealth : MonoBehaviour
         CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
 
 
-    }
-        public void ZeroLife()
-    {
-        GameOverText.gameObject.SetActive(true);
     }
 
 }

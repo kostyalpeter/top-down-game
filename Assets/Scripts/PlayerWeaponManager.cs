@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerWeaponManager : MonoBehaviour
 {
@@ -16,4 +18,5 @@ public class PlayerWeaponManager : MonoBehaviour
     {
         currentWeapon = weapon;
     }
+
 }
