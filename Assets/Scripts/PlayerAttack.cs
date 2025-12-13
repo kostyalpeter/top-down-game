@@ -15,6 +15,7 @@ public class PlayerAttack : MonoBehaviour
     public GameObject fireballPrefab;
     public float FireBallSpeed = 10f;
     public float MagicAttackCooldown = 0.6f;
+    AudioManager audioManager;
 
 
     private bool canAttack = true;
@@ -174,6 +175,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
             rb.linearVelocity = dir * FireBallSpeed;
+            // audioManager.FireBall();
         }
     }
 

@@ -10,7 +10,6 @@ public class LivesCounter : MonoBehaviour
     private static int _persistedLives = -1;
 
     private int _numOfLives;
-
     public UnityEvent OutOfLives;
 
     public int NumOfLives
@@ -69,7 +68,6 @@ public class LivesCounter : MonoBehaviour
     }
     public void ZeroLife()
     {
-        Time.timeScale = 0f;
+        
     }
-
 }

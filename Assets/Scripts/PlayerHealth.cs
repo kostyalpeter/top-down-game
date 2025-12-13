@@ -4,7 +4,6 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerHealth : MonoBehaviour
