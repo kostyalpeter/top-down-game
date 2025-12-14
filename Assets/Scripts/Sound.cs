@@ -3,7 +3,13 @@ using UnityEngine;
 public class Sound : MonoBehaviour
 {
     public AudioSource src;
-    public AudioClip step, fireball, hit, bow;
+    public AudioClip fireball, hit, bow;
+    public void Hitting()
+    {
+        src.clip = hit;
+        src.Play();
+    }
+
     public void Bow()
     {
         src.clip = bow;
