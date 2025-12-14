@@ -19,12 +19,4 @@ public class AudioManager : MonoBehaviour
         src.clip = hit;
         src.Play();
     }
-    public void FireBall()
-    {
-        src.clip = fireball;
-        src.Play();
-    }
-    public void StepStop();
-
-
 }

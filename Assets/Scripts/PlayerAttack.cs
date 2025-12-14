@@ -15,7 +15,7 @@ public class PlayerAttack : MonoBehaviour
     public GameObject fireballPrefab;
     public float FireBallSpeed = 10f;
     public float MagicAttackCooldown = 0.6f;
-    AudioManager audioManager;
+    Sound Sound;
 
 
     private bool canAttack = true;
@@ -36,6 +36,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
                 {
                     animator.ResetTrigger("Attack_Bow");
+                    animator.ResetTrigger("Attack_Magic");
                     animator.SetTrigger("Attack");
                     StartCoroutine(AttackCooldown());
                 }
@@ -45,6 +46,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
                 {
                     animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("Attack_Magic");
                     animator.SetTrigger("Attack_Bow");
                     StartCoroutine(AttackCooldown());
                 }
@@ -54,7 +56,8 @@ public class PlayerAttack : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
                 {
                     animator.ResetTrigger("Attack");
-                    animator.SetTrigger("Attack_Bow");
+                    animator.ResetTrigger("Attack_Bow");
+                    animator.SetTrigger("Attack_Magic");
                     StartCoroutine(AttackCooldown());
                 }
             }
@@ -70,6 +73,7 @@ public class PlayerAttack : MonoBehaviour
             canAttack = false;
             animator.ResetTrigger("Attack");
             animator.ResetTrigger("Attack_Bow");
+            animator.ResetTrigger("Attack_Magic");
         }
         else
         {
@@ -122,7 +126,6 @@ public class PlayerAttack : MonoBehaviour
 
         if (wm.currentWeapon == PlayerWeaponManager.WeaponType.Magic)
         {
-            ShootMagic();
             return;
         }
 
@@ -175,7 +178,6 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector2 dir = facingLeft ? Vector2.left : Vector2.right;
             rb.linearVelocity = dir * FireBallSpeed;
-            // audioManager.FireBall();
         }
     }
 
