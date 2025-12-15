@@ -2,37 +2,23 @@ using UnityEngine;
 
 public class Summon : MonoBehaviour
 {
-    [SerializeField] GameObject _enemyPrefab;
-    [SerializeField] float sizeX = 1f;
-    [SerializeField] float sizeY = 1f;
-    [SerializeField] float spawnCooldown = 1f;
-    [SerializeField] float spawntime;
-
-    void Start()
+    public GameObject Summoned;
+    public float time = 10f;
+    public float timer = 0f;
+    void Update()
     {
-        spawntime = spawnCooldown;
-    }
-
-    private void Update()
-    {
-        if (spawntime < 0) spawntime -= Time.deltaTime;
-
-        if (spawntime <= 0)
+        timer += Time.deltaTime;
+        if (timer >= time)
         {
-            Instantiate(_enemyPrefab, transform.position, transform.rotation);
-            spawntime = spawnCooldown;
+            SpawnEnemy();
+            timer = 0f;
         }
     }
-
-    void spawnEnemy()
+    public void SpawnEnemy()
     {
-        float xPos = (Random.value - 0.5f) * 2 * sizeX + gameObject.transform.position.x;
-        float yPos = (Random.value - 0.5f) * 2 * sizeY + gameObject.transform.position.x;
-
-        var spawn = Instantiate(_enemyPrefab);
-
-        spawn.transform.position = new Vector3(xPos, yPos, 0);
+        Instantiate(Summoned, transform.position + Vector3.right * 2f, Quaternion.identity);
+        Instantiate(Summoned, transform.position + Vector3.left * 2f, Quaternion.identity);
+        Instantiate(Summoned, transform.position + Vector3.up * 2f, Quaternion.identity);
+        Instantiate(Summoned, transform.position + Vector3.down * 2f, Quaternion.identity);
     }
-
-
 }
