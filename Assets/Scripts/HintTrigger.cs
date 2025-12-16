@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
 using System.IO.Compression;
+using Unity.Burst.CompilerServices;
 
 public class HintTrigger : MonoBehaviour
 {
@@ -17,8 +18,6 @@ public class HintTrigger : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if (hintText != null)
-            hintText.gameObject.SetActive(false);
     }
 
     void Update()
@@ -45,8 +44,9 @@ public class HintTrigger : MonoBehaviour
         isVisible = false;
         hintText.gameObject.SetActive(false);
     }
-    public void Hide()
+    void OnDisable()
     {
-        gameObject.
+        if (hintText != null)
+            hintText.gameObject.SetActive(false);
     }
 }
