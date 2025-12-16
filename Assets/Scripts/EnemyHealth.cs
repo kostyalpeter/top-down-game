@@ -11,7 +11,7 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     public GameObject boss;
     public GameObject WinText;
-    public float wait = 2f;
+    Ending ending;
 
     public int GetCurrentHealth() => currentHealth;
 
@@ -29,8 +29,8 @@ public class EnemyHealth : MonoBehaviour
     private Animator animator;
     private Collider2D col;
     private Rigidbody2D rb;
-
     public float CurrentHealth { get; internal set; }
+    PlayerHealth playerHealth;
 
     void Start()
     {
@@ -63,7 +63,7 @@ public class EnemyHealth : MonoBehaviour
         if (currentHealth <= 0 && boss != null)
         {
             Die();
-            WinText.SetActive(true);
+            ending.Update();
         }
 
     }
