@@ -11,7 +11,6 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     public GameObject boss;
     public GameObject WinText;
-    Ending ending;
 
     public int GetCurrentHealth() => currentHealth;
 
@@ -62,8 +61,8 @@ public class EnemyHealth : MonoBehaviour
         }
         if (currentHealth <= 0 && boss != null)
         {
+            WinText.SetActive(true);
             Die();
-            ending.Update();
         }
 
     }
