@@ -4,7 +4,7 @@ using TMPro;
 public class Shop : MonoBehaviour
 {
     public float interactDistance = 2f;
-    public static int price = 1;
+    public static int price = 20;
     public GameObject item;
     Transform player;
     NotEnoughText NotEnoughText;
