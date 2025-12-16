@@ -1,5 +1,8 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using System.IO.Compression;
 
 public class HintTrigger : MonoBehaviour
 {
@@ -9,7 +12,6 @@ public class HintTrigger : MonoBehaviour
 
     private Transform player;
     private bool isVisible = false;
-    NotEnoughText notEnoughText;
 
     void Start()
     {
@@ -42,5 +44,9 @@ public class HintTrigger : MonoBehaviour
     {
         isVisible = false;
         hintText.gameObject.SetActive(false);
+    }
+    public void Hide()
+    {
+        gameObject.
     }
 }

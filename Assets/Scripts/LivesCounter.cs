@@ -8,6 +8,8 @@ public class LivesCounter : MonoBehaviour
     [SerializeField] private Transform livesParent;
     private static LivesCounter _instance;
     private static int _persistedLives = -1;
+    public float time = 0f;
+    public float timer = 3f;
 
     private int _numOfLives;
     public UnityEvent OutOfLives;
@@ -68,6 +70,6 @@ public class LivesCounter : MonoBehaviour
     }
     public void ZeroLife()
     {
-        
+            Time.timeScale = 0f;
     }
 }

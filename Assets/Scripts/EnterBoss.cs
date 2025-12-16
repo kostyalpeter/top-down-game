@@ -25,4 +25,5 @@ public class EnterBoss : MonoBehaviour
         rocks.SetActive(false);
     }
 
+
 }
