@@ -20,13 +20,13 @@ public class Enough : MonoBehaviour
 
     public void Update()
     {
-        if (player == null || EnoughText == null || CoinManager.coins <= Shop.price) return;
+        if (player == null || EnoughText == null) return;
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        if (dist <= showDistance && !isVisible)
+        if (dist <= showDistance && !isVisible && CoinManager.coins >= Shop.price)
             ShowText();
-        else if (dist > showDistance && isVisible)
+        else if (dist > showDistance && isVisible || CoinManager.coins < Shop.price)
             HideText();
     }
 

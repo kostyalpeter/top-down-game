@@ -42,4 +42,5 @@ public class NotEnoughText : MonoBehaviour
         isVisible = false;
         NotEnough.gameObject.SetActive(false);
     }
+    
 }
