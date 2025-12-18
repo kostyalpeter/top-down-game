@@ -13,10 +13,6 @@ public class BossBarrier : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    void Update()
-    {
-        float dist = Vector2.Distance(transform.position, player.position);
-    }
     void OnTriggerEnter2D(Collider2D other)
     {
             if (other.CompareTag("Player"))

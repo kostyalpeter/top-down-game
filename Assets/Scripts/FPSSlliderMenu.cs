@@ -11,7 +11,6 @@ public class FPSSliderMenu : MonoBehaviour
     public TMP_Text fpsText;
 
     private bool sliderVisible = false;
-    private bool vsyncEnabled;
     private int frames;
     private float timer;
     private int displayedFps;
@@ -49,17 +48,10 @@ public class FPSSliderMenu : MonoBehaviour
             frames = 0;
             timer = 0f;
         }
-
-        if (fpsText != null)
-        {
-            string mode = vsyncEnabled ? "VSync" : Application.targetFrameRate + " FPS";
-            fpsText.text = $"{displayedFps} ({mode})";
-        }
     }
 
     void UpdateFPS(float value)
     {
-        vsyncEnabled = false;
         QualitySettings.vSyncCount = 0;
         int fps = Mathf.RoundToInt(value);
         Application.targetFrameRate = Mathf.Clamp(fps, minFPS, maxFPS);
