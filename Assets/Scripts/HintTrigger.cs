@@ -1,10 +1,5 @@
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.UIElements;
-using System.IO.Compression;
-using Unity.Burst.CompilerServices;
-
 public class HintTrigger : MonoBehaviour
 {
     [SerializeField] public TMP_Text hintText;
