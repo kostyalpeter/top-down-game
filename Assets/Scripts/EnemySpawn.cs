@@ -14,21 +14,12 @@ public class EnemySpawn : MonoBehaviour
         float dist = Vector2.Distance(transform.position, player.position);
         if (dist <= Distance)
             ShowEnemy();
-        else if (dist > Distance)
-            HideEnemy();
     }
     void ShowEnemy()
     {
         foreach (GameObject enemy in enemies)
         {
                 enemy.SetActive(true);
-        }
-    }
-    void HideEnemy()
-    {
-        foreach (GameObject enemy in enemies)
-        {
-                enemy.SetActive(false);
         }
     }
 }
