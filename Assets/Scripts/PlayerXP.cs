@@ -58,21 +58,21 @@ public class PlayerXP : MonoBehaviour
     }
     private void XPLevel5()
     {
-        if (currentLevel == 5)
+        if (currentLevel >= 5)
         {
             asd();
         }
     }
     private void XPLevel10()
     {
-        if (currentLevel == 10)
+        if (currentLevel >= 10)
         {
             inventoryContoller.LevelUp();
         }
     }
     private void XPLevel15()
     {
-        if (currentLevel == 15)
+        if (currentLevel >= 15)
         {
             asd2();
         }

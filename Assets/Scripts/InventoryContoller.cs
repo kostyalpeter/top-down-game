@@ -146,7 +146,7 @@ public class InventoryContoller : MonoBehaviour
 
     public void LevelUp()
     {
-        slotCount += 1;
+        slotCount += 9;
         ExpandInventory();
     }
 
